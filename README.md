@@ -1,15 +1,7 @@
-# to-science
-
-# cerate aptos dapp
-
-## install aptos-sdk
+# Start
 
 ```bash
-yarn add
+cd science
+yarn dev
 ```
 
-## install wallet-adapter
-
-```bash
-yarn add @aptos-labs/wallet-adapter-react
-```
