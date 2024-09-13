@@ -1,4 +1,5 @@
 'use client'
+
 import React, { useState, useCallback, useEffect } from 'react'
 
 const COLORS = ['white', 'red', 'blue', 'green', 'yellow', 'purple', 'orange']
@@ -9,7 +10,6 @@ const ColorMatrixGame = () => {
       .fill(0)
       .map(() => Math.floor(Math.random() * 6) + 1)
   )
-
   const [matrix, setMatrix] = useState(
     Array(10)
       .fill(0)
@@ -19,28 +19,13 @@ const ColorMatrixGame = () => {
           .map(() => Math.floor(Math.random() * 6) + 1)
       )
   )
-
   const [score, setScore] = useState(0)
 
-  // 计算分数：使用 Task 的数组索引比较 PlayArea 的数组索引
   const calculateScore = useCallback(() => {
     let newScore = 0
-    // 遍历数组，计算分数
     for (let i = 0; i < matrix.length; i++) {
       for (let j = 0; j < matrix[i].length; j++) {
-        // console.log(
-        //   `[INFO] calcuate score: \narray: ${i}, \nelement: ${matrix[i][j]}`
-        // )
-        // console.log(`column: ${j}`)
-        console.log(`task [${j}] color ${COLORS[task[j]]}`)
-
-        // console.log('element:', matrix[i][j])
-        if (task[i] === matrix[i][j]) {
-          console.log(
-            ` matrix[${i}][${j}] color:${
-              COLORS[matrix[i][j]]
-            } === task[${i}] color:${COLORS[task[i]]}`
-          )
+        if (task[j] === matrix[i][j]) {
           newScore++
         }
       }
@@ -54,7 +39,6 @@ const ColorMatrixGame = () => {
 
   const handleCellClick = useCallback(
     (rowIndex, colIndex) => {
-      console.log('matrix: ', matrix)
       const newMatrix = [...matrix]
       newMatrix[rowIndex].splice(colIndex, 0, 0)
       newMatrix[rowIndex].pop()
@@ -66,37 +50,32 @@ const ColorMatrixGame = () => {
 
   return (
     <div className="flex flex-col items-center p-4">
-      {/* 分数 */}
-      <div className="text-2xl font-bold mb-4">Score: {score}</div>
-      {/* 左侧矩阵 */}
-      <div className="flex ">
-        <div className="mr-2 flex flex-col  border-8 rounded-md">
-          {' '}
-          {/* Reverse the left column */}
+      <div className="text-2xl font-bold ">Score: {score}</div>
+      <div className="flex">
+        {/* side bar */}
+        <div className="mr-2 flex flex-col-reverse">
           {task.map((color, index) => (
             <div
               key={index}
-              className={`w-8 h-8 mt-1 my-1${
-                matrix.every((row) => row[index] === color)
-                  ? 'border-2 border-black'
+              className={`w-8 h-8 ${
+                matrix.some((row) => row[index] === color)
+                  ? 'border-2 rounded '
                   : ''
               }`}
               style={{ backgroundColor: COLORS[color] }}
             />
           ))}
         </div>
-        {/* 右侧矩阵 */}
-        <div className="flex border-8 rounded-md">
-          {' '}
-          {/* Main matrix container */}
+        {/* play area */}
+        <div className="flex">
           {matrix.map((row, rowIndex) => (
+            // array
             <div key={rowIndex} className="flex flex-col-reverse">
-              {' '}
-              {/* Each column, reversed */}
               {row.map((color, colIndex) => (
+                // cell
                 <div
                   key={colIndex}
-                  className="w-8 h-8 border cursor-pointer mx-1 my-1"
+                  className="w-8 h-8 border border-gray-200 cursor-pointer "
                   style={{ backgroundColor: COLORS[color] }}
                   onClick={() => handleCellClick(rowIndex, colIndex)}
                 />
