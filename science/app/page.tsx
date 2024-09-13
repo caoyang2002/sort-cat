@@ -1,16 +1,13 @@
-import Image from 'next/image'
-import Score from '@/components/Score'
-import PlayArea from '@/components/PlayArea'
-import Nucleotide from '@/components/Nucleotide'
+import Score from "@/components/Score";
+import PlayArea from "@/components/PlayArea";
 export default function Home() {
   return (
-    <div className="">
+    <div className="page">
       <Score />
-      {/* //flex flex-col items-center */}
       <div className="flex">
-        <Nucleotide />
+        {/* <Nucleotide /> */}
         <PlayArea />
       </div>
     </div>
-  )
+  );
 }
