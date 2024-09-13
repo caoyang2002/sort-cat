@@ -1,100 +1,89 @@
 "use client";
 
 import React, { useState, useCallback, useEffect } from "react";
+import {
+  calculateScore,
+  generateRandomBoard,
+  generateRandomTarget,
+  matchBoard,
+} from "./tool/logic";
+import { BASE_COLORS } from "@/model/base";
 
-const COLORS = ["white", "red", "blue", "green", "yellow", "purple", "orange"];
 const ROWS = 10;
 const COLS = 13;
+
 const ColorMatrixGame = () => {
-  const [task, setTask] = useState(
-    Array(ROWS)
-      .fill(0)
-      .map(() => Math.floor(Math.random() * 6) + 1)
-  );
-  const [matrix, setMatrix] = useState(
-    Array(ROWS)
-      .fill(0)
-      .map(() =>
-        Array(COLS)
-          .fill(0)
-          .map(() => Math.floor(Math.random() * 6) + 1)
-      )
-  );
+  const [targets, setTargets] = useState<string[]>([]);
+  const [board, setBoard] = useState<string[][]>([]);
   const [score, setScore] = useState(0);
-  const [highlightedColumns, setHighlightedColumns] = useState([]);
+  const [matchResult, setMatchResult] = useState<number[][]>(
+    Array(ROWS).fill(Array(COLS).fill(0))
+  );
 
-  const calculateScore = useCallback(() => {
-    let newScore = 0;
-    const newHighlightedColumns = [];
+  // 初始化随机 targets 和 board
+  useEffect(() => {
+    setTargets([generateRandomTarget(ROWS)]);
+    setBoard(generateRandomBoard(ROWS, COLS));
+  }, []);
 
-    for (let j = 0; j < task.length; j++) {
-      let columnMatch = false;
-      for (let i = 0; i < matrix.length; i++) {
-        if (matrix[i][j] === task[j]) {
-          newScore++;
-          columnMatch = true;
-          break;
-        }
-      }
-      if (columnMatch) {
-        newHighlightedColumns.push(j);
-      }
-    }
-
-    setScore(newScore);
-    setHighlightedColumns(newHighlightedColumns);
-  }, [task, matrix]);
+  const calculateAndUpdateScore = useCallback(() => {
+    const result = matchBoard(board, targets);
+    setMatchResult(result);
+    setScore(calculateScore(result));
+  }, [board, targets]);
 
   useEffect(() => {
-    calculateScore();
-  }, [calculateScore]);
+    if (board.length > 0 && targets.length > 0) {
+      calculateAndUpdateScore();
+    }
+  }, [calculateAndUpdateScore, board, targets]);
 
   const handleCellClick = useCallback(
     (rowIndex: number, colIndex: number) => {
-      const newMatrix = [...matrix];
+      const newBoard = board.map((row) => [...row]);
       for (let i = 0; i < rowIndex; i++) {
-        newMatrix[i][colIndex] = newMatrix[i + 1][colIndex];
+        newBoard[i][colIndex] = newBoard[i + 1][colIndex];
       }
-      newMatrix[rowIndex][colIndex] = 0;
-      setMatrix(newMatrix);
-      calculateScore();
+      newBoard[rowIndex][colIndex] = "#";
+      setBoard(newBoard);
+      calculateAndUpdateScore();
     },
-    [matrix, calculateScore]
+    [board, calculateAndUpdateScore]
   );
 
   return (
     <div className="flex flex-col items-center p-4">
       <div className="text-2xl font-bold mb-4">Score: {score}</div>
       <div className="flex">
-        {/* side bar */}
-        <div className="mr-2 flex flex-col-reverse">
-          {task.map((color, index) => (
+        {/* Targets side bar */}
+        <div className="mr-4 flex flex-col">
+          {board.map((_, rowIndex) => (
             <div
-              key={index}
-              className={`w-8 h-8 ${
-                highlightedColumns.includes(index)
-                  ? "border-2 border-black rounded"
-                  : "rounded"
-              } my-1`}
-              style={{ backgroundColor: COLORS[color] }}
-            />
+              key={`target-${rowIndex}`}
+              className="w-8 h-8 border rounded my-1 flex items-center justify-center bg-gray-200"
+              style={{ backgroundColor: BASE_COLORS[targets[0][rowIndex]] }}
+            >
+              {targets[0][rowIndex]}
+            </div>
           ))}
         </div>
-        {/* play area */}
+        {/* Board play area */}
         <div className="flex flex-col">
-          {matrix.map((row, rowIndex) => (
+          {board.map((row, rowIndex) => (
             <div key={rowIndex} className="flex">
-              {row.map((color, colIndex) => (
+              {row.map((char, colIndex) => (
                 <div
                   key={colIndex}
-                  className={`w-8 h-8 rounded cursor-pointer my-1 mx-1 ${
-                    highlightedColumns.includes(colIndex)
+                  className={`w-8 h-8 rounded cursor-pointer my-1 mx-1 flex items-center justify-center ${
+                    matchResult[rowIndex][colIndex]
                       ? "border-2 border-black"
-                      : ""
+                      : "border border-gray-300"
                   }`}
-                  style={{ backgroundColor: COLORS[color] }}
+                  style={{ backgroundColor: BASE_COLORS[char] }}
                   onClick={() => handleCellClick(rowIndex, colIndex)}
-                />
+                >
+                  {char !== " " ? char : ""}
+                </div>
               ))}
             </div>
           ))}
