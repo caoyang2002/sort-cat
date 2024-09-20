@@ -1,4 +1,4 @@
-import { Nucleotide } from '../Nucleotide'
+// import { Nucleotide } from '../Nucleotide'
 /**
  * 生成指定的矩阵，按照给定规则填充数字和零。
  *
@@ -7,7 +7,7 @@ import { Nucleotide } from '../Nucleotide'
  * @returns 矩阵。
  */
 function Cell(rows: number, cols: number): string[][] {
-  console.log('cell: ', rows, '-', cols)
+  console.log('[INFO] Cell: ', rows, '-', cols)
   // 用于生成矩阵的函数
   const generateRow = (): number[] => {
     // 创建一个空行
@@ -21,7 +21,7 @@ function Cell(rows: number, cols: number): string[][] {
     { length: rows },
     generateRow
   ) as unknown as string[][]
-  console.log('cell: ', matrix)
+  console.log('[INFO] Cell: ', matrix)
   return matrix
 }
 

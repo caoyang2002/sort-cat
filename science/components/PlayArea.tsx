@@ -137,10 +137,7 @@ const PlayArea = () => {
     updatedRow.splice(colIndex, 1)
 
     // 如果最后一个元素是 0，则补零
-    while (
-      updatedRow.length < SPACE_AMOUNT &&
-      updatedRow[updatedRow.length - 1] === '0'
-    ) {
+    while (updatedRow[updatedRow.length - 1] === '0') {
       console.log('[INFO] PlayArea: 补零')
       updatedRow.push('0')
       break
@@ -149,10 +146,7 @@ const PlayArea = () => {
     let originalIndexLast = SPACE_AMOUNT - 1
     const updatedIndexLast = updatedRow.length - 1
     // 如果最后一个元素不是 0，则找到最后一个匹配的位置，并将其  updatedRow.push()
-    while (
-      updatedRow.length < SPACE_AMOUNT &&
-      updatedRow[updatedRow.length - 1] !== '0'
-    ) {
+    while (updatedRow[updatedRow.length - 1] !== '0') {
       console.log(
         '[INFO] PlayArea: ',
         originalIndexLast,
@@ -177,15 +171,25 @@ const PlayArea = () => {
           updatedRow[updatedIndexLast - 1] ===
           originalRow[originalIndexLast - 1]
         ) {
-          console.log('[INFO] PlayArea: 前面一个匹配')
+          console.log(
+            '[INFO] PlayArea: 前面一个匹配',
+            updatedRow[updatedIndexLast - 1],
+            '==',
+            originalRow[originalIndexLast - 1]
+          )
           updatedRow.push(originalRow[originalIndexLast + 1])
           break
         } else {
-          console.log('[INFO] PlayArea: 前面一个不匹配')
+          console.log(
+            '[INFO] PlayArea: 前面一个不匹配',
+            updatedRow[updatedIndexLast - 1],
+            '!=',
+            originalRow[originalIndexLast - 1]
+          )
           // updatedRow.push(originalRow[originalIndexLast + 1])
+          break
         }
         // updatedRow.push(originalRow[originalIndexLast + 1])
-        // break
       }
       originalIndexLast--
     }

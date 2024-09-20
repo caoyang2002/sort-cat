@@ -20,7 +20,6 @@ export const NUCLEOTIDE_COLORS = {
 }
 
 export const Nucleotide = ['A', 'G', 'U', 'C', 'T']
-
-export const getClassName = (cell) => {
-  return `${NUCLEOTIDE_COLORS[cell]}`
+export const getClassName = (cell: string) => {
+  return `${NUCLEOTIDE_COLORS[cell as keyof typeof NUCLEOTIDE_COLORS] || ''}`
 }

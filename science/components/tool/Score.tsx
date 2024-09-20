@@ -1,4 +1,4 @@
-import Matrix from './Matrix'
+// import Matrix from './Matrix'
 
 function Score(
   matrix: string[][] | undefined,
@@ -28,9 +28,9 @@ function Score(
     let matchLength = 0
     for (let col = startCol; col < Math.min(matrixCols, taskCols); col++) {
       if (
-        matrix[matrixRow][col] !== '0' &&
-        matrix[matrixRow][col] !== '#' &&
-        matrix[matrixRow][col] === task[taskRow][col]
+        matrix?.[matrixRow]?.[col] !== '0' &&
+        matrix?.[matrixRow]?.[col] !== '#' &&
+        matrix?.[matrixRow]?.[col] === task?.[taskRow]?.[col]
       ) {
         matchLength++
       } else {
@@ -50,9 +50,9 @@ function Score(
       ) {
         const matchLength = checkSubarrayMatch(i, j, startCol)
         if (matchLength > 0) {
-          console.log(
-            `Match found: matrix row ${i}, task row ${j}, starting at column ${startCol}, length ${matchLength}`
-          )
+          // console.log(
+          //   `Match found: matrix row ${i}, task row ${j}, starting at column ${startCol}, length ${matchLength}`
+          // )
           score += matchLength
         }
       }
