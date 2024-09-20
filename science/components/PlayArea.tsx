@@ -110,6 +110,7 @@ const PlayArea = () => {
     )
   }
 
+  // 删除
   const deleteHash = (
     matrix: MatrixType,
     originalMatrix: MatrixType,
@@ -130,9 +131,6 @@ const PlayArea = () => {
     const updatedRow = updatedMatrix[rowIndex]
     const originalRow = originalMatrix[rowIndex]
 
-    console.log('[INFO] PlayArea: 当前的数组：', updatedRow)
-    console.log('[INFO] PlayArea: 原始的数组：', originalRow)
-
     // 删除用户点击的位置的元素，并将数组左移
     updatedRow.splice(colIndex, 1)
 
@@ -144,9 +142,20 @@ const PlayArea = () => {
     }
 
     let originalIndexLast = SPACE_AMOUNT - 1
-    const updatedIndexLast = updatedRow.length - 1
+    let updatedIndexLast = updatedRow.length - 1
     // 如果最后一个元素不是 0，则找到最后一个匹配的位置，并将其  updatedRow.push()
-    while (updatedRow[updatedRow.length - 1] !== '0') {
+    while (
+      updatedRow[updatedRow.length - 1] !== '0' &&
+      originalIndexLast >= 0
+    ) {
+      // 判断是否为 #
+      if (updatedRow[updatedIndexLast] === '#') {
+        console.log('末尾为 #')
+        updatedIndexLast--
+        continue
+      }
+      console.log('[INFO] PlayArea: 当前的数组：', updatedRow)
+      console.log('[INFO] PlayArea: 原始的数组：', originalRow)
       console.log(
         '[INFO] PlayArea: ',
         originalIndexLast,
@@ -157,6 +166,8 @@ const PlayArea = () => {
         ' ? ',
         originalRow[originalIndexLast]
       )
+      // 查找匹配的
+
       if (updatedRow[updatedIndexLast] === originalRow[originalIndexLast]) {
         console.log(
           '[INFO] PlayArea: 找到原始数组中最后一个匹配的位置：',
@@ -169,13 +180,16 @@ const PlayArea = () => {
         // 检查前面一个是否匹配,如果匹配，则将 originalRow[originalIndexLast] 添加到 updatedRow 中，如果不匹配，
         if (
           updatedRow[updatedIndexLast - 1] ===
-          originalRow[originalIndexLast - 1]
+            originalRow[originalIndexLast - 1] ||
+          updatedRow[updatedIndexLast - 1] === '#'
         ) {
           console.log(
             '[INFO] PlayArea: 前面一个匹配',
             updatedRow[updatedIndexLast - 1],
             '==',
-            originalRow[originalIndexLast - 1]
+            originalRow[originalIndexLast - 1],
+            ' or ',
+            '#'
           )
           updatedRow.push(originalRow[originalIndexLast + 1])
           break
@@ -193,38 +207,6 @@ const PlayArea = () => {
       }
       originalIndexLast--
     }
-    // 找到第一个不匹配的位置
-    // while (
-    //   // 当前的数组长度小于 12
-    //   updatedIndex < updatedRow.length
-    // ) {
-    //   if (updatedRow[updatedIndex] !== originalRow[originalIndex]) {
-    //     console.log(
-    //       '[INFO] PlayArea: 找到第一个不匹配的位置：',
-    //       updatedIndex,
-    //       ' -- ',
-    //       updatedRow[updatedIndex],
-    //       '!=',
-    //       originalRow[originalIndex]
-    //     )
-    //     break
-    //   }
-    //   updatedIndex++
-    //   originalIndex++
-    // }
-
-    // 跳过被删除的元素
-    // originalIndex++
-
-    // 从不匹配的位置开始，用 originalRow 的元素填充 updatedRow
-    // while (
-    //   updatedRow.length < SPACE_AMOUNT &&
-    //   originalIndex < originalRow.length
-    // ) {
-    //   updatedRow.push(originalRow[originalIndex])
-    //   originalIndex++
-    // }
-
     return updatedMatrix
   }
 
