@@ -1,11 +1,15 @@
 # Start
 
 ```bash
-cd science
+cd frontend
 yarn dev
 ```
 
+
+
 # Overview
+
+[Website](https://sortdna.vercel.app/)
 
 ![ui](doc/ui.jpg)
 
