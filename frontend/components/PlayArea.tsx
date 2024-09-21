@@ -7,6 +7,7 @@ import Cell from '@/components/tool/Cell'
 import Score from '@/components/tool/Score'
 import { WalletSelector } from '@aptos-labs/wallet-adapter-ant-design'
 import '@aptos-labs/wallet-adapter-ant-design/dist/index.css'
+import updateArray from '@/components/tool/DeleteHash'
 // import Wallet from './wallet'
 
 const SPACE_AMOUNT = 12
@@ -124,94 +125,118 @@ const PlayArea = () => {
       !matrix ||
       !originalMatrix ||
       !matrix[rowIndex] ||
-      !originalMatrix[rowIndex]
+      !originalMatrix[rowIndex][colIndex]
     ) {
       console.error('Invalid matrix or row index in deleteHash')
       return matrix
     }
-
+    // 算法
     const updatedMatrix = matrix.map((row) => [...row])
-    const updatedRow = updatedMatrix[rowIndex]
-    const originalRow = originalMatrix[rowIndex]
-
-    // 删除用户点击的位置的元素，并将数组左移
-    updatedRow.splice(colIndex, 1)
-
-    // 如果最后一个元素是 0，则补零
-    while (updatedRow[updatedRow.length - 1] === '0') {
-      console.log('[INFO] PlayArea: 补零')
-      updatedRow.push('0')
-      break
-    }
-
-    let originalIndexLast = SPACE_AMOUNT - 1
-    let updatedIndexLast = updatedRow.length - 1
-    // 如果最后一个元素不是 0，则找到最后一个匹配的位置，并将其  updatedRow.push()
-    while (
-      updatedRow[updatedRow.length - 1] !== '0' &&
-      originalIndexLast >= 0
-    ) {
-      // 判断是否为 #
-      if (updatedRow[updatedIndexLast] === '#') {
-        console.log('末尾为 #')
-        updatedIndexLast--
-        continue
-      }
-      console.log('[INFO] PlayArea: 当前的数组：', updatedRow)
-      console.log('[INFO] PlayArea: 原始的数组：', originalRow)
-      console.log(
-        '[INFO] PlayArea: ',
-        originalIndexLast,
-        ' ? ',
-        updatedIndexLast,
-        '---',
-        updatedRow[updatedIndexLast],
-        ' ? ',
-        originalRow[originalIndexLast]
-      )
-      // 查找匹配的
-
-      if (updatedRow[updatedIndexLast] === originalRow[originalIndexLast]) {
-        console.log(
-          '[INFO] PlayArea: 找到原始数组中最后一个匹配的位置：',
-          originalIndexLast,
-          ' -- ',
-          updatedRow[updatedIndexLast],
-          '==',
-          originalRow[originalIndexLast]
-        )
-        // 检查前面一个是否匹配,如果匹配，则将 originalRow[originalIndexLast] 添加到 updatedRow 中，如果不匹配，
-        if (
-          updatedRow[updatedIndexLast - 1] ===
-            originalRow[originalIndexLast - 1] ||
-          updatedRow[updatedIndexLast - 1] === '#'
-        ) {
-          console.log(
-            '[INFO] PlayArea: 前面一个匹配',
-            updatedRow[updatedIndexLast - 1],
-            '==',
-            originalRow[originalIndexLast - 1],
-            ' or ',
-            '#'
-          )
-          updatedRow.push(originalRow[originalIndexLast + 1])
-          break
-        } else {
-          console.log(
-            '[INFO] PlayArea: 前面一个不匹配',
-            updatedRow[updatedIndexLast - 1],
-            '!=',
-            originalRow[originalIndexLast - 1]
-          )
-          // updatedRow.push(originalRow[originalIndexLast + 1])
-          break
-        }
-        // updatedRow.push(originalRow[originalIndexLast + 1])
-      }
-      originalIndexLast--
-    }
+    updatedMatrix[rowIndex] = updateArray(
+      originalMatrix[rowIndex],
+      updatedMatrix[rowIndex],
+      colIndex
+    )
     return updatedMatrix
   }
+  // const deleteHash = (
+  //   matrix: MatrixType,
+  //   originalMatrix: MatrixType,
+  //   rowIndex: number,
+  //   colIndex: number
+  // ): MatrixType => {
+  //   if (
+  //     !matrix ||
+  //     !originalMatrix ||
+  //     !matrix[rowIndex] ||
+  //     !originalMatrix[rowIndex]
+  //   ) {
+  //     console.error('Invalid matrix or row index in deleteHash')
+  //     return matrix
+  //   }
+
+  //   const updatedMatrix = matrix.map((row) => [...row])
+  //   const updatedRow = updatedMatrix[rowIndex]
+  //   const originalRow = originalMatrix[rowIndex]
+
+  //   // 删除用户点击的位置的元素，并将数组左移
+  //   updatedRow.splice(colIndex, 1)
+
+  //   // 如果最后一个元素是 0，则补零
+  //   while (updatedRow[updatedRow.length - 1] === '0') {
+  //     console.log('[INFO] PlayArea: 补零')
+  //     updatedRow.push('0')
+  //     break
+  //   }
+
+  //   let originalIndexLast = SPACE_AMOUNT - 1
+  //   let updatedIndexLast = updatedRow.length - 1
+  //   // 如果最后一个元素不是 0，则找到最后一个匹配的位置，并将其  updatedRow.push()
+  //   while (
+  //     updatedRow[updatedRow.length - 1] !== '0' &&
+  //     originalIndexLast >= 0
+  //   ) {
+  //     // 判断是否为 #
+  //     if (updatedRow[updatedIndexLast] === '#') {
+  //       console.log('末尾为 #')
+  //       updatedIndexLast--
+  //       continue
+  //     }
+  //     console.log('[INFO] PlayArea: 当前的数组：', updatedRow)
+  //     console.log('[INFO] PlayArea: 原始的数组：', originalRow)
+  //     console.log(
+  //       '[INFO] PlayArea: ',
+  //       originalIndexLast,
+  //       ' ? ',
+  //       updatedIndexLast,
+  //       '---',
+  //       updatedRow[updatedIndexLast],
+  //       ' ? ',
+  //       originalRow[originalIndexLast]
+  //     )
+  //     // 查找匹配的
+
+  //     if (updatedRow[updatedIndexLast] === originalRow[originalIndexLast]) {
+  //       console.log(
+  //         '[INFO] PlayArea: 找到原始数组中最后一个匹配的位置：',
+  //         originalIndexLast,
+  //         ' -- ',
+  //         updatedRow[updatedIndexLast],
+  //         '==',
+  //         originalRow[originalIndexLast]
+  //       )
+  //       // 检查前面一个是否匹配,如果匹配，则将 originalRow[originalIndexLast] 添加到 updatedRow 中，如果不匹配，
+  //       if (
+  //         updatedRow[updatedIndexLast - 1] ===
+  //           originalRow[originalIndexLast - 1] ||
+  //         updatedRow[updatedIndexLast - 1] === '#'
+  //       ) {
+  //         console.log(
+  //           '[INFO] PlayArea: 前面一个匹配',
+  //           updatedRow[updatedIndexLast - 1],
+  //           '==',
+  //           originalRow[originalIndexLast - 1],
+  //           ' or ',
+  //           '#'
+  //         )
+  //         updatedRow.push(originalRow[originalIndexLast + 1])
+  //         break
+  //       } else {
+  //         console.log(
+  //           '[INFO] PlayArea: 前面一个不匹配',
+  //           updatedRow[updatedIndexLast - 1],
+  //           '!=',
+  //           originalRow[originalIndexLast - 1]
+  //         )
+  //         // updatedRow.push(originalRow[originalIndexLast + 1])
+  //         break
+  //       }
+  //       // updatedRow.push(originalRow[originalIndexLast + 1])
+  //     }
+  //     originalIndexLast--
+  //   }
+  //   return updatedMatrix
+  // }
 
   const addHash = (matrix: MatrixType, rowIndex: number, colIndex: number) => {
     const updatedMatrix = matrix.map((row) => [...row])
@@ -332,13 +357,3 @@ const PlayArea = () => {
 }
 
 export default PlayArea
-
-
-当删除任意一个 # 的时候，需要将 # 后面的元素左移，并补充原始的数组对应的字符
-
-测试：
-[0,1,2,3,4,5,6,7,8,9]
-[0,#,1,#,2,#,3,#,4,#] 
-
-[1,2,2,3,3,3,4,4,4,4]
-[#,#,#,1,#,2,2,#,3,#] 
