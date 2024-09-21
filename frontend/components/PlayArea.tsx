@@ -8,7 +8,6 @@ import Score from '@/components/tool/Score'
 import { WalletSelector } from '@aptos-labs/wallet-adapter-ant-design'
 import '@aptos-labs/wallet-adapter-ant-design/dist/index.css'
 import updateArray from '@/components/tool/DeleteHash'
-// import Wallet from './wallet'
 
 const SPACE_AMOUNT = 12
 const task = Task(1, 12)

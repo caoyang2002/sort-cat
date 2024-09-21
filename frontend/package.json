@@ -9,10 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@aptos-connect/wallet-adapter-plugin": "^2.0.2",
-    "@aptos-labs/ts-sdk": "^1.28.0",
-    "@aptos-labs/wallet-adapter-ant-design": "^3.0.14",
-    "@aptos-labs/wallet-adapter-react": "^3.7.0",
+    "@aptos-labs/ts-sdk": "^1.22.2",
+    "@aptos-labs/wallet-adapter-ant-design": "^2.6.3",
+    "@aptos-labs/wallet-adapter-react": "^3.4.3",
     "next": "14.2.9",
     "react": "^18",
     "react-dom": "^18"
