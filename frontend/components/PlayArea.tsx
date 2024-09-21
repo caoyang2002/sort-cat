@@ -5,6 +5,9 @@ import Task from '@/components/tool/Task'
 import { getClassName } from './Nucleotide'
 import Cell from '@/components/tool/Cell'
 import Score from '@/components/tool/Score'
+import { WalletSelector } from '@aptos-labs/wallet-adapter-ant-design'
+import '@aptos-labs/wallet-adapter-ant-design/dist/index.css'
+// import Wallet from './wallet'
 
 const SPACE_AMOUNT = 12
 const task = Task(1, 12)
@@ -225,10 +228,12 @@ const PlayArea = () => {
 
   return (
     <>
+      {/* <Wallet /> */}
       <header>
         <p className="font-bold flex items-center justify-center">
           score: {JSON.stringify(score)}
         </p>
+        <WalletSelector />
       </header>
 
       <main className="flex justify-between">
@@ -327,3 +332,13 @@ const PlayArea = () => {
 }
 
 export default PlayArea
+
+
+当删除任意一个 # 的时候，需要将 # 后面的元素左移，并补充原始的数组对应的字符
+
+测试：
+[0,1,2,3,4,5,6,7,8,9]
+[0,#,1,#,2,#,3,#,4,#] 
+
+[1,2,2,3,3,3,4,4,4,4]
+[#,#,#,1,#,2,2,#,3,#] 
