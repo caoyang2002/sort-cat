@@ -5,8 +5,8 @@ import Task from '@/components/tool/Task'
 import { getClassName } from './Nucleotide'
 import Cell from '@/components/tool/Cell'
 import Score from '@/components/tool/Score'
-import { WalletSelector } from '@aptos-labs/wallet-adapter-ant-design'
-import '@aptos-labs/wallet-adapter-ant-design/dist/index.css'
+// import { WalletSelector } from '@aptos-labs/wallet-adapter-ant-design'
+// import '@aptos-labs/wallet-adapter-ant-design/dist/index.css'
 import updateArray from '@/components/tool/DeleteHash'
 
 const SPACE_AMOUNT = 12
@@ -159,7 +159,6 @@ const PlayArea = () => {
         <p className="font-bold flex items-center justify-center">
           score: {JSON.stringify(score)}
         </p>
-        <WalletSelector />
       </header>
 
       <main className="flex justify-between">
@@ -245,6 +244,7 @@ const PlayArea = () => {
       </main>
       <footer>
         <p className="flex items-center justify-center">Thanks</p>
+
         <div className="w-8 h-8 mx-1 my-1 border rounded my-1 flex justify-center bg-red-700"></div>
         <div className="w-8 h-8 mx-1 my-1 border rounded my-1 flex justify-center bg-green-700"></div>
         <div className="w-8 h-8 mx-1 my-1 border rounded my-1 flex justify-center bg-blue-700"></div>

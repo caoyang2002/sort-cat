@@ -1,0 +1,73 @@
+.container {
+  width: 200px;
+  height: 200px;
+  perspective: 1000px;
+  margin: 100px auto;
+}
+
+.logo {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  animation: rotate 20s infinite linear;
+}
+
+.layer {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  backface-visibility: visible;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotateX(0) rotateY(0);
+  }
+  100% {
+    transform: rotateX(360deg) rotateY(360deg);
+  }
+}
+
+/* 反光效果 */
+.logo::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  right: -50%;
+  bottom: -50%;
+  background: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.8) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotateZ(60deg) translate(-50%, -50%);
+  animation: reflection 8s infinite linear;
+  pointer-events: none;
+}
+
+@keyframes reflection {
+  0%,
+  100% {
+    transform: rotateZ(60deg) translate(-50%, -50%) scale(1, 1);
+  }
+  50% {
+    transform: rotateZ(60deg) translate(-50%, -50%) scale(1.5, 0.5);
+  }
+}
+
+/* 添加一些阴影效果来增强3D感 */
+.logo::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 0, 0, 0.2) 0%,
+    rgba(0, 0, 0, 0) 70%
+  );
+  transform: translateZ(-20px) scale(1.1);
+}

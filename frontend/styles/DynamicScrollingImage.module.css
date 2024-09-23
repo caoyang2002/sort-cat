@@ -1,0 +1,27 @@
+.container {
+  overflow: hidden;
+  width: 100%;
+}
+
+.scrollContainer {
+  display: flex;
+  width: calc(var(--image-count) * var(--image-size));
+  animation: scroll var(--scroll-duration) linear infinite;
+}
+
+.imageWrapper {
+  flex: 0 0 var(--image-size);
+  height: var(--image-size);
+  position: relative;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(
+      calc(-1 * var(--image-count) * var(--image-size) / 2)
+    );
+  }
+}
