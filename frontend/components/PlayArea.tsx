@@ -1,91 +1,164 @@
 'use client'
 import { useCallback, useState, useEffect } from 'react'
-import Matrix from '@/components/tool/Matrix'
-import Task from '@/components/tool/Task'
-import { getClassName } from './Nucleotide'
-import Cell from '@/components/tool/Cell'
+import Matrix from '@/components/tool/PlayMatrix'
+import TaskMatrix from '@/components/tool/TaskMatrix'
+import {
+  getBackgroundColor,
+  getCellBackgroundColor,
+} from './CellBackgroundColor'
+import CellMatrix from '@/components/tool/CellMatrix'
 import Score from '@/components/tool/Score'
 // import { WalletSelector } from '@aptos-labs/wallet-adapter-ant-design'
 // import '@aptos-labs/wallet-adapter-ant-design/dist/index.css'
 import updateArray from '@/components/tool/DeleteHash'
+import Image from 'next/image'
+import { getCatImage } from '@/components/Cat'
+import HeighLightAllArray from './tool/HeighLightAllArray'
 
 const SPACE_AMOUNT = 12
-const task = Task(1, 12)
+const taskMatrix = TaskMatrix(1, 12)
 
 type MatrixType = string[][]
-type CellType = string[][]
+type CellMatrixType = string[][]
 type ScoreType = number
+type HeighLightType = [number, number][][]
+type CellArray = [number, number][]
 
-const PlayArea = () => {
+const PlayMatrixArea = () => {
   const [score, setScore] = useState<ScoreType>(0)
+  const [heighLight, setHeighLiht] = useState<HeighLightType>([])
   const [matrix, setMatrix] = useState<MatrixType>([])
-  const [cell, setCell] = useState<CellType>([])
+  const [cellMatrix, setCellMatrix] = useState<CellMatrixType>([])
   const [isClient, setIsClient] = useState(false)
   const [originalMatrix, setOriginalMatrix] = useState<MatrixType>([])
-
+  const [cellArray, setCellArray] = useState<CellArray>([])
+  // 首次加载 UI
   useEffect(() => {
     setIsClient(true)
-    const initialMatrix = Matrix(10, 12, 9, 4) as MatrixType
+    const initialMatrix = Matrix(10, 12, 10, 7) as MatrixType
     setMatrix(initialMatrix)
 
-    const initialCell = Cell(1, SPACE_AMOUNT) as CellType
-    setCell(initialCell)
-    // const initialScore = Score(matrix, task) as ScoreType
+    const initialCellMatrix = CellMatrix(1, SPACE_AMOUNT) as CellMatrixType
+    setCellMatrix(initialCellMatrix)
+    // const initialScore = Score(matrix, taskMatrix) as ScoreType
     // setScore(initialScore)
-    setMatrix(initialMatrix)
     setOriginalMatrix(initialMatrix.map((row) => [...row]))
   }, [])
+
+  // 积分高亮
   useEffect(() => {
-    if (matrix && task) {
-      const calculatedScore = Score(matrix, task)
+    if (matrix && taskMatrix) {
+      const calculatedScore = Score(matrix, taskMatrix)
       setScore(calculatedScore)
+      const heighLightArray = HeighLightAllArray(matrix, taskMatrix)
+      console.log('test: ', heighLightArray)
+      setHeighLiht(heighLightArray)
+      setBackgroundColor(heighLightArray)
     }
-  }, [matrix, task])
+  }, [matrix, taskMatrix])
+
+  // 设置背景颜色
+  useEffect(() => {
+    if (cellArray) {
+      console.log(cellArray)
+    }
+  })
+  // 设置背景颜色
+  function setBackgroundColor(heighLightCellArray: [number, number][][]) {
+    // console.log('[BG color]', heighLightCellArray)
+    // const cellArray: [number, number][] = []
+    // console.log('[BG color]', heighLightCellArray)
+    heighLightCellArray.forEach((cell, cellIndex) => {
+      // console.log('cell: ', cell, 'cell index', cellIndex)
+      cell.forEach((singleCell, singleCellIndex) => {
+        // console.log(
+        //   'single cell: ',
+        //   singleCell,
+        //   'single cell index',
+        //   singleCellIndex
+        // )
+        cellArray.push(singleCell) // This now works
+      })
+
+      // 获取到每一个高亮 cell 的具体位置
+      // console.log('matrix cell: ', matrix[cell[0][0]][cell[0][1]])
+    })
+    // console.log('should light cell array: ', cellArray)
+    cellArray.map((cell, cellIndex) => {
+      // console.log('high light: ', cell[0], '-', cell[1])
+      const hlCellElement = document.getElementById(
+        `${cell[0]}-${cell[1]}`
+      ) as HTMLElement
+      if (!hlCellElement) {
+        console.error('Matrix table not found')
+        return
+      }
+      // console.log(
+      //   'cell color: ',
+      //   getCellBackgroundColor(matrix[cell[0]][cell[1]])
+      // )
+      hlCellElement.classList.remove(
+        'bg-opacity-30',
+        'backdrop-blur-md',
+        'block'
+      )
+
+      hlCellElement.classList.add(
+        `${getCellBackgroundColor(matrix[cell[0]][cell[1]])}`
+      )
+      hlCellElement.classList.add('transition', 'duration-300')
+    })
+  }
 
   const calculateAndUpdateScore = useCallback(() => {
-    console.log('[INFO] PlayArea: 开始计算和更新分数')
-    const result = Score(matrix, task)
+    console.log('[INFO] PlayMatrixArea: 开始计算和更新分数')
+    const result = Score(matrix, taskMatrix)
     setScore(result)
-    console.log('[INFO] PlayArea: 分数: ', result)
+    console.log('[INFO] PlayMatrixArea: 分数: ', result)
   }, [matrix, score])
 
   // 处理点击位置
-  const handleCellClick = useCallback(
+  const handleCellMatrixClick = useCallback(
     (rowIndex: number, colIndex: number) => {
       console.log(
-        '[HANDLE] PlayArea: ####################### 开始处理点击位置 #######################'
+        '[HANDLE] PlayMatrixArea: ####################### 开始处理点击位置 #######################'
       )
-      console.log('[INFO] PlayArea: 点击位置：', rowIndex, '-', colIndex)
+      console.log('[INFO] PlayMatrixArea: 点击位置：', rowIndex, '-', colIndex)
 
       const currentMatrix = matrix.map((row) => [...row])
-      const clickedCell = currentMatrix[rowIndex][colIndex]
+      const clickedCellMatrix = currentMatrix[rowIndex][colIndex]
 
-      if (clickedCell === '0') {
+      if (clickedCellMatrix === '0') {
         console.log('[INFO] 点击的位置是 0，不执行任何操作')
         return
       }
 
       let updatedMatrix
-      // let updatedCell
+      // let updatedCellMatrix
 
-      if (clickedCell === '#') {
-        console.log('[INFO] PlayArea: 点击的位置是 #，执行删除 # 的操作')
+      if (clickedCellMatrix === '#') {
+        console.log('[INFO] PlayMatrixArea: 点击的位置是 #，执行删除 # 的操作')
         updatedMatrix = deleteHash(
           currentMatrix,
           originalMatrix,
           rowIndex,
           colIndex
         )
-        console.log('[INFO] PlayArea: 删除后的矩阵', updatedMatrix[rowIndex])
+        console.log(
+          '[INFO] PlayMatrixArea: 删除后的矩阵',
+          updatedMatrix[rowIndex]
+        )
       } else {
-        console.log('[INFO] PlayArea: 点击的位置是 Cell，执行添加 # 的操作')
+        console.log(
+          '[INFO] PlayMatrixArea: 点击的位置是 CellMatrix，执行添加 # 的操作'
+        )
         const matrixSpace = countHashes(currentMatrix)
 
         if (matrixSpace < SPACE_AMOUNT) {
-          console.log('[INFO] PlayArea: 有可用的 #')
+          console.log('[INFO] PlayMatrixArea: 有可用的 #')
           updatedMatrix = addHash(currentMatrix, rowIndex, colIndex)
         } else {
-          console.log('[INFO] PlayArea: 没有可用的 # 了')
+          console.log('[INFO] PlayMatrixArea: 没有可用的 # 了')
           alert('没有可用的 # 了')
           return
         }
@@ -93,14 +166,17 @@ const PlayArea = () => {
 
       const updatedMatrixSpace = countHashes(updatedMatrix)
       const remainingSpace = SPACE_AMOUNT - updatedMatrixSpace
-      const updatedCell = Cell(1, remainingSpace)
+      const updatedCellMatrix = CellMatrix(1, remainingSpace)
 
       setMatrix(updatedMatrix)
-      setCell(updatedCell)
+      setCellMatrix(updatedCellMatrix)
       calculateAndUpdateScore()
 
-      console.log('[INFO] PlayArea: 更新后的矩阵：', updatedMatrix)
-      console.log('[INFO] PlayArea: 更新后的 Cell：', updatedCell)
+      console.log('[INFO] PlayMatrixArea: 更新后的矩阵：', updatedMatrix)
+      console.log(
+        '[INFO] PlayMatrixArea: 更新后的 CellMatrix：',
+        updatedCellMatrix
+      )
     },
     [matrix, calculateAndUpdateScore]
   )
@@ -108,7 +184,8 @@ const PlayArea = () => {
   // Helper functions
   const countHashes = (matrix: MatrixType) => {
     return matrix.reduce(
-      (count, row) => count + row.filter((cell) => cell === '#').length,
+      (count, row) =>
+        count + row.filter((cellMatrix) => cellMatrix === '#').length,
       0
     )
   }
@@ -162,55 +239,68 @@ const PlayArea = () => {
       </header>
 
       <main className="flex justify-between">
-        {/* task */}
+        {/* taskMatrix */}
         <div>
-          <h1>Task</h1>
-          <div className="flex">
-            {task.map((row, rowIndex) => (
-              <div key={rowIndex} className="">
-                <div>
+          {/* <h1>TaskMatrix</h1> */}
+          <div className="flex mx-8">
+            {taskMatrix.map((row, rowIndex) => (
+              <div key={rowIndex} className="px-2">
+                {/* <div>
                   <span>{rowIndex}</span>
-                </div>
+                </div> */}
                 {row
                   .slice()
                   .reverse()
-                  .map((cell, cellIndex) => (
+                  .map((cellMatrix, cellMatrixIndex) => (
                     <div
-                      key={`${rowIndex}-${cellIndex}`}
-                      className={`w-8 h-8 mx-1 my-1 border rounded my-1 flex justify-center bg-${getClassName(
-                        cell
+                      key={`${rowIndex}-${cellMatrixIndex}`}
+                      className={`w-12 h-12 mx-1 my-1 rounded my-1 flex justify-center backdrop-blur-md block ${getCellBackgroundColor(
+                        cellMatrix
                       )}`}
                     >
-                      <p className="mt-1">{cell}</p>
+                      <Image
+                        src={getCatImage(cellMatrix)}
+                        alt={cellMatrix}
+                        width={48}
+                        height={48}
+                      />
+                      {/* <p className="mt-1">{cellMatrix}</p> */}
                     </div>
                   ))}
               </div>
             ))}
           </div>
         </div>
-        {/* play */}
+        {/* playMatrix */}
         <div>
-          <h1>Play</h1>
+          {/* <h1>PlayMatrix</h1> */}
           <div className="flex">
             {matrix.map((row, rowIndex) => (
               <div key={rowIndex} className="">
-                <div>
+                {/* <div>
                   <span>{rowIndex}</span>
-                </div>
+                </div> */}
                 {row
                   .slice()
                   .reverse()
-                  .map((cell, reversedColIndex) => {
+                  .map((cellMatrix, reversedColIndex) => {
                     const colIndex = row.length - 1 - reversedColIndex
                     return (
                       <div
+                        id={`${rowIndex}-${colIndex}`}
                         key={`${rowIndex}-${colIndex}`}
-                        className={`w-8 h-8 mx-1 my-1 border rounded my-1 flex justify-center bg-${getClassName(
-                          cell
-                        )}`}
-                        onClick={() => handleCellClick(rowIndex, colIndex)}
+                        className={`w-12 h-12 mx-1 my-1 rounded my-1 flex justify-center bg-opacity-30 backdrop-blur-md block`}
+                        onClick={() =>
+                          handleCellMatrixClick(rowIndex, colIndex)
+                        }
                       >
-                        <p className="mt-1">{cell}</p>
+                        <Image
+                          src={getCatImage(cellMatrix)}
+                          alt={cellMatrix}
+                          width={48}
+                          height={48}
+                        />
+                        {/* <p className="mt-1">{cellMatrix}</p> */}
                       </div>
                     )
                   })}
@@ -218,23 +308,35 @@ const PlayArea = () => {
             ))}
           </div>
         </div>
-        {/* cell */}
+        {/* cellMatrix */}
         <div>
-          <h1>Cell</h1>
-          <div className="flex">
-            {cell.map((row, rowIndex) => (
-              <div key={rowIndex} className="">
-                <div>
+          {/* <h1>CellMatrix</h1> */}
+          <div className="flex mx-8">
+            {cellMatrix.map((row, rowIndex) => (
+              <div key={rowIndex} className="px-2">
+                {/* <div>
                   <span>{rowIndex}</span>
-                </div>
+                </div> */}
                 {row.map((cell, colIndex) => (
                   <div
                     key={`${rowIndex}-${colIndex}`}
-                    className={`w-8 h-8 mx-1 my-1 border rounded my-1 flex justify-center bg-${getClassName(
+                    className={`w-12 h-12 mx-1 my-1  rounded my-1 flex justify-center ${getCellBackgroundColor(
                       cell
                     )}`}
                   >
-                    <p className="mt-1">{cell}</p>
+                    <div className="relative w-12 h-12">
+                      <Image
+                        src={getCatImage(cell)}
+                        alt={cell}
+                        fill
+                        sizes="(max-width: 32px) 10vw, (max-width: 32px) 5vw, 3vw"
+                        style={{
+                          objectFit: 'cover',
+                        }}
+                      />
+                    </div>
+
+                    {/* <p className="mt-1">{cellMatrix}</p> */}
                   </div>
                 ))}
               </div>
@@ -243,18 +345,10 @@ const PlayArea = () => {
         </div>
       </main>
       <footer>
-        <p className="flex items-center justify-center">Thanks</p>
-
-        <div className="w-8 h-8 mx-1 my-1 border rounded my-1 flex justify-center bg-red-700"></div>
-        <div className="w-8 h-8 mx-1 my-1 border rounded my-1 flex justify-center bg-green-700"></div>
-        <div className="w-8 h-8 mx-1 my-1 border rounded my-1 flex justify-center bg-blue-700"></div>
-        <div className="w-8 h-8 mx-1 my-1 border rounded my-1 flex justify-center bg-yellow-700"></div>
-        <div className="w-8 h-8 mx-1 my-1 border rounded my-1 flex justify-center bg-purple-700"></div>
-        <div className="w-8 h-8 mx-1 my-1 border rounded my-1 flex justify-center bg-gray-300"></div>
-        <div className="w-8 h-8 mx-1 my-1 border rounded my-1 flex justify-center bg-white"></div>
+        <p className="flex items-center justify-center">Power by CaoYang2002</p>
       </footer>
     </>
   )
 }
 
-export default PlayArea
+export default PlayMatrixArea

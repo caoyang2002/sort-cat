@@ -1,4 +1,4 @@
-import { Nucleotide } from '../Nucleotide'
+import { Nucleotide } from '../CellBackgroundColor'
 /**
  * 生成指定的矩阵，按照给定规则填充数字和零。
  *

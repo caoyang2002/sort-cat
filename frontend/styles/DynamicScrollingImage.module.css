@@ -13,6 +13,7 @@
   flex: 0 0 var(--image-size);
   height: var(--image-size);
   position: relative;
+  border-radius: 8px; /* 小圆角 */
 }
 
 @keyframes scroll {

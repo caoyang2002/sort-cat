@@ -13,7 +13,7 @@ const DynamicScrollingImage: React.FC<DynamicScrollingImageProps> = ({
   const [images, setImages] = useState<string[]>([])
   const containerRef = useRef<HTMLDivElement>(null)
 
-  const IMAGE_SIZE = 80 // Image size in pixels
+  const IMAGE_SIZE = 60 // Image size in pixels
   const SCROLL_DURATION = 20 // Duration of one full scroll cycle in seconds
 
   useEffect(() => {
@@ -56,7 +56,7 @@ const DynamicScrollingImage: React.FC<DynamicScrollingImageProps> = ({
               alt={`Scrolling image ${index + 1}`}
               layout="fill"
               objectFit="cover"
-              className="px-1 py-1"
+              className="px-1 py-1 rounded rounded-lg "
             />
           </div>
         ))}

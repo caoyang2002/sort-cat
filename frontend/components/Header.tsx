@@ -1,87 +1,5 @@
 'use client'
-// import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react'
 
-// const Header: React.FC = () => {
-//   return (
-//     <>
-//       <div className="flex h-screen w-full justify-center pt-20">
-//         <div className="flex gap-8">
-//           <Popover>
-//             <PopoverButton className="block text-sm/6 font-semibold text-white/50 focus:outline-none data-[active]:text-white data-[hover]:text-white data-[focus]:outline-1 data-[focus]:outline-white">
-//               test
-//             </PopoverButton>
-//             <PopoverPanel
-//               transition
-//               anchor="bottom"
-//               className="divide-y divide-white/5 rounded-xl bg-white/5 text-sm/6 transition duration-200 ease-in-out [--anchor-gap:var(--spacing-5)] data-[closed]:-translate-y-1 data-[closed]:opacity-0"
-//             >
-//               <a
-//                 className="block rounded-lg py-2 px-3 transition hover:bg-white/5"
-//                 href="#"
-//               >
-//                 <p className="font-semibold text-white">Insights</p>
-//                 <p className="text-white/50">Measure actions your users take</p>
-//               </a>
-//             </PopoverPanel>
-//           </Popover>
-//           <Popover>
-//             <PopoverButton className="block text-sm/6 font-semibold text-white/50 focus:outline-none data-[active]:text-white data-[hover]:text-white data-[focus]:outline-1 data-[focus]:outline-white">
-//               Solutions
-//             </PopoverButton>
-//             <PopoverPanel
-//               transition
-//               anchor="bottom"
-//               className="divide-y divide-white/5 rounded-xl bg-white/5 text-sm/6 transition duration-200 ease-in-out [--anchor-gap:var(--spacing-5)] data-[closed]:-translate-y-1 data-[closed]:opacity-0"
-//             >
-//               <div className="p-3">
-//                 <a
-//                   className="block rounded-lg py-2 px-3 transition hover:bg-white/5"
-//                   href="#"
-//                 >
-//                   <p className="font-semibold text-white">Insights</p>
-//                   <p className="text-white/50">
-//                     Measure actions your users take
-//                   </p>
-//                 </a>
-//                 <a
-//                   className="block rounded-lg py-2 px-3 transition hover:bg-white/5"
-//                   href="#"
-//                 >
-//                   <p className="font-semibold text-white">Automations</p>
-//                   <p className="text-white/50">
-//                     Create your own targeted content
-//                   </p>
-//                 </a>
-//                 <a
-//                   className="block rounded-lg py-2 px-3 transition hover:bg-white/5"
-//                   href="#"
-//                 >
-//                   <p className="font-semibold text-white">Reports</p>
-//                   <p className="text-white/50">Keep track of your growth</p>
-//                 </a>
-//               </div>
-//               <div className="p-3">
-//                 <a
-//                   className="block rounded-lg py-2 px-3 transition hover:bg-white/5"
-//                   href="#"
-//                 >
-//                   <p className="font-semibold text-white">Documentation</p>
-//                   <p className="text-white/50">
-//                     Start integrating products and tools
-//                   </p>
-//                 </a>
-//               </div>
-//             </PopoverPanel>
-//           </Popover>
-//         </div>
-//       </div>
-//     </>
-//   )
-// }
-
-// export default Header
-
-// ------------------
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react'
 import { useState, useEffect, useRef } from 'react'
 import { WalletSelector } from '@aptos-labs/wallet-adapter-ant-design'
@@ -90,130 +8,189 @@ import '../styles/wallet.css'
 import Image from 'next/image'
 
 function HoverPopover() {
-  const [isOpen, setIsOpen] = useState(false)
-  const timeoutRef = useRef<number | null>(null)
+  const [isOpenAbout, setIsOpenAbout] = useState(false)
+  const [isOpenTips, setIsOpenTips] = useState(false)
+  const timeoutRefAbout = useRef<number | null>(null)
+  const timeoutRefTips = useRef<number | null>(null)
 
-  const handleMouseEnter = () => {
-    console.log('[INFO] 打开 Popover: ', isOpen)
-    if (timeoutRef.current !== null) {
-      clearTimeout(timeoutRef.current)
+  const handleMouseEnter = (popover: string) => {
+    if (popover === 'about') {
+      if (timeoutRefAbout.current !== null) {
+        clearTimeout(timeoutRefAbout.current)
+      }
+      setIsOpenAbout(true)
+    } else if (popover === 'tips') {
+      if (timeoutRefTips.current !== null) {
+        clearTimeout(timeoutRefTips.current)
+      }
+      setIsOpenTips(true)
     }
-    setIsOpen(true)
   }
 
-  const handleMouseLeave = () => {
-    console.log('[INFO] 打开 Popover: ', isOpen)
-    timeoutRef.current = window.setTimeout(() => {
-      setIsOpen(false)
-    }, 200) // 0ms delay before closing
+  const handleMouseLeave = (popover: string) => {
+    if (popover === 'about') {
+      timeoutRefAbout.current = window.setTimeout(() => {
+        setIsOpenAbout(false)
+      }, 100)
+    } else if (popover === 'tips') {
+      timeoutRefTips.current = window.setTimeout(() => {
+        setIsOpenTips(false)
+      }, 100)
+    }
   }
 
   useEffect(() => {
     return () => {
-      if (timeoutRef.current !== null) {
-        clearTimeout(timeoutRef.current)
+      if (timeoutRefAbout.current !== null) {
+        clearTimeout(timeoutRefAbout.current)
+      }
+      if (timeoutRefTips.current !== null) {
+        clearTimeout(timeoutRefTips.current)
       }
     }
   }, [])
 
   return (
     <>
-      <div className="flex w-full pt-2 pd-4">
-        <div className="justify-start px-2">
-          <a href="#">
-            <Image src="/assets/chyraw.svg" alt="logo" width={40} height={40} />
-          </a>
-        </div>
-        <div className="gap-8 flex px-2">
-          <Popover className="relative">
-            <div
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
-            >
-              <PopoverButton className="block text-lg/6 font-semibold text-white/50 focus:outline-none data-[active]:text-white data-[hover]:text-white data-[focus]:outline-1 data-[focus]:outline-white">
-                <span>Info</span>
-              </PopoverButton>
-              {isOpen && (
-                <PopoverPanel
-                  transition
-                  anchor="bottom"
-                  static
-                  // className="absolute z-10 mt-2 w-48 p-4 bg-white border rounded shadow-md"
-                  className="absolute z-10 mt-2 w-48 p-4 bg-white border rounded shadow-md divide-y divide-white/5 rounded-xl bg-white/5 text-sm/6 transition  ease-in-out  bg-opacity-20 backdrop-blur-sm"
-                >
-                  <a
-                    className="block rounded-lg py-2 px-3 transition  bg-opacity-30 backdrop-blur-md"
-                    href="#"
+      <div className="flex justify-center w-full py-2 px-2">
+        <div className="flex justify-between w-full max-w-4xl items-center">
+          {/* LOGO */}
+          <div className="flex-none justify-start px-2">
+            <a href="#">
+              <Image
+                src="/assets/chyraw.svg"
+                alt="logo"
+                width={40}
+                height={40}
+              />
+            </a>
+          </div>
+          <div className="flex-none justify-center">
+            {/* Popover */}
+            <div className="flex items-center justify-center space-x-8">
+              <div className="flex-1 justify-center">
+                <Popover className="relative">
+                  <div
+                    onMouseEnter={() => handleMouseEnter('about')}
+                    onMouseLeave={() => handleMouseLeave('about')}
                   >
-                    <p className="font-semibold text-white">Name</p>
-                    <p className="text-white/50">
-                      描述房东放大放大色啊发森阿森阿森打算放大森动改啊跟邓丢过
-                    </p>
-                  </a>
-                </PopoverPanel>
-              )}
+                    <PopoverButton className="block text-lg/6 font-semibold text-white/50 focus:outline-none data-[active]:text-white data-[hover]:text-white data-[focus]:outline-1 data-[focus]:outline-white">
+                      <span>About</span>
+                    </PopoverButton>
+                    {isOpenAbout && (
+                      <PopoverPanel
+                        transition
+                        anchor="bottom"
+                        static
+                        className="absolute z-10 mt-1 w-48 p-1 bg-white border rounded shadow-md divide-y divide-white/5 rounded-xl bg-white/5 text-sm/6 transition  ease-in-out  bg-opacity-20 backdrop-blur-sm"
+                      >
+                        <div className="p-3">
+                          <div>
+                            <a
+                              className="px-2 py-2 bg-opacity-30 backdrop-blur-md block rounded-lg transition hover:bg-white/5"
+                              href="#"
+                            >
+                              <p className="font-semibold text-white">Score</p>
+                              <p className="text-white/50">积分规则</p>
+                            </a>
+                          </div>
+                          <div>
+                            <a
+                              className="px-2 py-2 mt-2 bg-opacity-30 backdrop-blur-md block rounded-lg transition hover:bg-white/5"
+                              href="#"
+                            >
+                              <p className="font-semibold text-white ">
+                                Insert
+                              </p>
+                              <p className="text-white/50">插入</p>
+                            </a>
+                          </div>
+                          <div>
+                            <a
+                              className="px-2 py-2 mt-2 bg-opacity-30 backdrop-blur-md block rounded-lg transition hover:bg-white/5"
+                              href="#"
+                            >
+                              <p className="font-semibold text-white ">Team</p>
+                              <p className="text-white/50">开发团队</p>
+                            </a>
+                          </div>
+                        </div>
+                      </PopoverPanel>
+                    )}
+                  </div>
+                </Popover>
+              </div>
+              <div className="flex-1 justify-center">
+                {/* Tips */}
+                <Popover className="relative flex-1 justify-center">
+                  <div
+                    onMouseEnter={() => handleMouseEnter('tips')}
+                    onMouseLeave={() => handleMouseLeave('tips')}
+                  >
+                    <PopoverButton className="block text-lg/6 font-semibold text-white/50 focus:outline-none data-[active]:text-white data-[hover]:text-white data-[focus]:outline-1 data-[focus]:outline-white">
+                      <span>Tips</span>
+                    </PopoverButton>
+                    {isOpenTips && (
+                      <PopoverPanel
+                        transition
+                        anchor="bottom"
+                        static
+                        // className="absolute z-10 mt-2 w-48 p-4 bg-white border rounded shadow-md"
+                        className="absolute z-10 mt-1 w-48 p-1 bg-white border rounded shadow-md divide-y divide-white/5 rounded-xl bg-white/5 text-sm/6 transition  ease-in-out  bg-opacity-20 backdrop-blur-sm"
+                      >
+                        <div className="p-3">
+                          <a
+                            className="px-2 py-2 bg-opacity-30 backdrop-blur-md block rounded-lg transition hover:bg-white/5"
+                            href="#"
+                          >
+                            <p className="font-semibold text-white">Name</p>
+                            <p className="text-white/50">玩法介绍</p>
+                          </a>
+                          <a
+                            className="px-2 py-2 mt-2 bg-opacity-30 backdrop-blur-md block rounded-lg transition hover:bg-white/5"
+                            href="#"
+                          >
+                            <p className="font-semibold text-white ">Name</p>
+                            <p className="text-white/50">玩法介绍</p>
+                          </a>
+                        </div>
+                      </PopoverPanel>
+                    )}
+                  </div>
+                </Popover>
+              </div>
+              <div className="flex-1 justify-center">
+                <Image
+                  src="/assets/twitter-x.svg"
+                  alt="logo"
+                  width={32}
+                  height={32}
+                  style={{
+                    width: '32px',
+                    height: '32px',
+                    objectFit: 'contain',
+                  }}
+                />
+              </div>
+              <div className="flex-1 justify-center">
+                <Image
+                  src="/assets/github-mark-white.svg"
+                  alt="logo"
+                  width={32}
+                  height={32}
+                  style={{
+                    width: '32px',
+                    height: '32px',
+                    objectFit: 'contain',
+                  }}
+                />
+              </div>
             </div>
-          </Popover>
-          <Popover>
-            <PopoverButton className="block text-sm/6 font-semibold text-white/50 focus:outline-none data-[active]:text-white data-[hover]:text-white data-[focus]:outline-1 data-[focus]:outline-white">
-              Solutions
-            </PopoverButton>
-            <PopoverPanel
-              transition
-              anchor="bottom"
-              className="divide-y divide-white/5 rounded-xl bg-white/5 text-sm/6 transition duration-200 ease-in-out [--anchor-gap:var(--spacing-5)] data-[closed]:-translate-y-1 data-[closed]:opacity-0 bg-opacity-20 backdrop-blur-sm"
-            >
-              <div className="p-3">
-                <a
-                  className="block rounded-lg py-2 px-3 transition hover:bg-white/5"
-                  href="#"
-                >
-                  <p className="font-semibold text-white">Insights</p>
-                  <p className="text-white/50">
-                    Measure actions your users take
-                  </p>
-                </a>
-                <a
-                  className="block rounded-lg py-2 px-3 transition hover:bg-white/5"
-                  href="#"
-                >
-                  <p className="font-semibold text-white">Automations</p>
-                  <p className="text-white/50">
-                    Create your own targeted content
-                  </p>
-                </a>
-                <a
-                  className="block rounded-lg py-2 px-3 transition hover:bg-white/5"
-                  href="#"
-                >
-                  <p className="font-semibold text-white">Reports</p>
-                  <p className="text-white/50">Keep track of your growth</p>
-                </a>
-              </div>
-              <div className="p-3">
-                <a
-                  className="block rounded-lg py-2 px-3 transition hover:bg-white/5"
-                  href="#"
-                >
-                  <p className="font-semibold text-white">Documentation</p>
-                  <p className="text-white/50">
-                    Start integrating products and tools
-                  </p>
-                </a>
-              </div>
-            </PopoverPanel>
-          </Popover>
-        </div>
-        <div className="flex justify-end">
-          <WalletSelector />
-        </div>
-        <div className="flex justify-end px-2">
-          <Image
-            src="/assets/github-mark-white.svg"
-            alt="logo"
-            width={40}
-            height={40}
-          />
+          </div>
+
+          <div className="flex-none justify-end">
+            <WalletSelector />
+          </div>
         </div>
       </div>
     </>
@@ -221,36 +198,3 @@ function HoverPopover() {
 }
 
 export default HoverPopover
-
-// import React from 'react'
-// import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react'
-
-// export default function HoverPopover() {
-//   return (
-//     <Popover className="relative">
-//       {({ open }) => (
-//         <>
-//           <PopoverButton className="px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-//             悬浮我
-//           </PopoverButton>
-
-//           <PopoverPanel
-//             static
-//             className={`
-//               absolute z-10 w-64 p-4 mt-2 bg-white rounded-md shadow-lg
-//               transition-opacity duration-300 ease-in-out
-//               ${open ? 'opacity-100' : 'opacity-0 pointer-events-none'}
-//             `}
-//           >
-//             <div className="text-sm text-gray-500">
-//               <p className="font-medium text-gray-700">
-//                 这里是 Popover 的内容!
-//               </p>
-//               <p className="mt-2">可以放置更多信息或操作。</p>
-//             </div>
-//           </PopoverPanel>
-//         </>
-//       )}
-//     </Popover>
-//   )
-// }

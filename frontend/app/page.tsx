@@ -1,10 +1,10 @@
 import DynamicScrollingImage from '@/components/DynamicScrollingImage'
 import FlowField from '@/components/FlowField '
 import Header from '@/components/Header'
-import InstancedParticles from '@/components/InstancedParticles'
-import Particles from '@/components/Particles'
+// import InstancedParticles from '@/components/InstancedParticles'
+// import Particles from '@/components/Particles'
 import PlayArea from '@/components/PlayArea'
-import SardineShoal from '@/components/SardineShoal'
+// import SardineShoal from '@/components/SardineShoal'
 // import ThreeDRotatingLogo from '@/components/ThreeDRotatingLogo'
 
 export default function Home() {

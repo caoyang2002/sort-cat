@@ -1,4 +1,4 @@
-import { Nucleotide } from '../Nucleotide'
+import { Nucleotide } from '../CellBackgroundColor'
 
 /**
  * 创建一个二维数组（矩阵），每行的元素数量在指定的范围内，不足的部分用 '0' 填充。
