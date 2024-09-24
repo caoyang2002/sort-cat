@@ -1,7 +1,11 @@
 import DynamicScrollingImage from '@/components/DynamicScrollingImage'
+import FlowField from '@/components/FlowField '
 import Header from '@/components/Header'
+import InstancedParticles from '@/components/InstancedParticles'
+import Particles from '@/components/Particles'
 import PlayArea from '@/components/PlayArea'
-import ThreeDRotatingLogo from '@/components/ThreeDRotatingLogo'
+import SardineShoal from '@/components/SardineShoal'
+// import ThreeDRotatingLogo from '@/components/ThreeDRotatingLogo'
 
 export default function Home() {
   const initialImages = [
@@ -42,7 +46,11 @@ export default function Home() {
           <DynamicScrollingImage initialImages={initialImages} />
         </div>
         {/* <ThreeDRotatingLogo /> */}
+        <FlowField />
+        {/* <SardineShoal /> */}
+        {/* <Particles /> */}
         <PlayArea />
+        {/* <InstancedParticles /> */}
       </div>
     </>
   )

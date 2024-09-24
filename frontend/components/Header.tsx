@@ -87,6 +87,7 @@ import { useState, useEffect, useRef } from 'react'
 import { WalletSelector } from '@aptos-labs/wallet-adapter-ant-design'
 import '@aptos-labs/wallet-adapter-ant-design/dist/index.css'
 import '../styles/wallet.css'
+import Image from 'next/image'
 
 function HoverPopover() {
   const [isOpen, setIsOpen] = useState(false)
@@ -117,8 +118,13 @@ function HoverPopover() {
 
   return (
     <>
-      <div className="flex w-full justify-center pt-2 pd-4">
-        <div className="flex gap-8">
+      <div className="flex w-full pt-2 pd-4">
+        <div className="justify-start px-2">
+          <a href="#">
+            <Image src="/assets/chyraw.svg" alt="logo" width={40} height={40} />
+          </a>
+        </div>
+        <div className="gap-8 flex px-2">
           <Popover className="relative">
             <div
               onMouseEnter={handleMouseEnter}
@@ -198,7 +204,17 @@ function HoverPopover() {
             </PopoverPanel>
           </Popover>
         </div>
-        <WalletSelector />
+        <div className="flex justify-end">
+          <WalletSelector />
+        </div>
+        <div className="flex justify-end px-2">
+          <Image
+            src="/assets/github-mark-white.svg"
+            alt="logo"
+            width={40}
+            height={40}
+          />
+        </div>
       </div>
     </>
   )
