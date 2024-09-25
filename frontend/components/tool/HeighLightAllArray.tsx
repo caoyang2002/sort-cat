@@ -9,7 +9,7 @@ function HeighLightAllArray(
     console.log('Score: Invalid input. Returning 0.')
     return []
   }
-  console.log('============== HeighLightAllArray.tsx ==============')
+  console.log('=========== HeighLightAllArray.tsx ===========')
   const matrixRows = matrix.length
   const matrixCols = matrix[0].length
   console.log('matrix 行', matrixRows, matrixCols)
@@ -37,20 +37,20 @@ function HeighLightAllArray(
         matrixCell !== '#' &&
         matrixCell === taskCell
       ) {
-        console.log(
-          '匹配： matrix[',
-          matrixRow,
-          '][',
-          col,
-          '] = ',
-          matrixCell,
-          ' 和 task[',
-          taskRow,
-          '][',
-          col,
-          ']',
-          taskCell
-        )
+        // console.log(
+        //   '匹配： matrix[',
+        //   matrixRow,
+        //   '][',
+        //   col,
+        //   '] = ',
+        //   matrixCell,
+        //   ' 和 task[',
+        //   taskRow,
+        //   '][',
+        //   col,
+        //   ']',
+        //   taskCell
+        // )
         matchIndices.push([matrixRow, col])
       } else {
         break
@@ -71,15 +71,15 @@ function HeighLightAllArray(
         const matchArray = checkSubarrayMatch(i, j, startCol)
 
         if (matchArray.length > 0) {
-          console.log(
-            `找到匹配项：Matrix 行 ${i}，Task 行 ${j}，从列 ${startCol} 开始，长度 ${matchArray}`
-          )
+          // console.log(
+          //   `找到匹配项：Matrix 行 ${i}，Task 行 ${j}，从列 ${startCol} 开始，长度 ${matchArray}`
+          // )
           heighLightArray.push(matchArray)
         }
       }
     }
   }
-  console.log('matchArray: ', heighLightArray)
+  console.log('[heigh light] HeighLightAllArray.tsx: ', heighLightArray)
 
   return heighLightArray
 }

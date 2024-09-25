@@ -52,8 +52,8 @@ function HoverPopover() {
 
   return (
     <>
-      <div className="flex justify-center w-full py-2 px-2">
-        <div className="flex justify-between w-full max-w-4xl items-center">
+      <div className="flex justify-center w-full py-2 px-2 rounded-lg bg-opacity-30 backdrop-blur-md block">
+        <div className="flex justify-between w-full max-w-4xl items-center ">
           {/* LOGO */}
           <div className="flex-none justify-start px-2">
             <a href="#">
@@ -87,16 +87,16 @@ function HoverPopover() {
                         <div className="p-3">
                           <div>
                             <a
-                              className="px-2 py-2 bg-opacity-30 backdrop-blur-md block rounded-lg transition hover:bg-white/5"
+                              className="px-2 py-2 bg-opacity-60 backdrop-blur-xl block rounded-lg transition hover:bg-white/5"
                               href="#"
                             >
-                              <p className="font-semibold text-white">Score</p>
+                              <p className="font-semibold text-white ">Score</p>
                               <p className="text-white/50">积分规则</p>
                             </a>
                           </div>
                           <div>
                             <a
-                              className="px-2 py-2 mt-2 bg-opacity-30 backdrop-blur-md block rounded-lg transition hover:bg-white/5"
+                              className="px-2 py-2 mt-2 bg-opacity-60 backdrop-blur-xl block rounded-lg transition hover:bg-white/5"
                               href="#"
                             >
                               <p className="font-semibold text-white ">
@@ -107,7 +107,7 @@ function HoverPopover() {
                           </div>
                           <div>
                             <a
-                              className="px-2 py-2 mt-2 bg-opacity-30 backdrop-blur-md block rounded-lg transition hover:bg-white/5"
+                              className="px-2 py-2 mt-2 bg-opacity-60 backdrop-blur-xl block rounded-lg transition hover:bg-white/5"
                               href="#"
                             >
                               <p className="font-semibold text-white ">Team</p>

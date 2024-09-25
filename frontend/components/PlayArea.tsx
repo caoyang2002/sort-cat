@@ -26,12 +26,12 @@ type CellArray = [number, number][]
 
 const PlayMatrixArea = () => {
   const [score, setScore] = useState<ScoreType>(0)
-  const [heighLight, setHeighLiht] = useState<HeighLightType>([])
+  const [heighLight, setHeighLight] = useState<HeighLightType>([])
   const [matrix, setMatrix] = useState<MatrixType>([])
   const [cellMatrix, setCellMatrix] = useState<CellMatrixType>([])
   const [isClient, setIsClient] = useState(false)
   const [originalMatrix, setOriginalMatrix] = useState<MatrixType>([])
-  const [cellArray, setCellArray] = useState<CellArray>([])
+  // const [cellArray, setCellArray] = useState<CellArray>([])
   // 首次加载 UI
   useEffect(() => {
     setIsClient(true)
@@ -45,28 +45,58 @@ const PlayMatrixArea = () => {
     setOriginalMatrix(initialMatrix.map((row) => [...row]))
   }, [])
 
-  // 积分高亮
+  // 积分和高亮
   useEffect(() => {
     if (matrix && taskMatrix) {
       const calculatedScore = Score(matrix, taskMatrix)
       setScore(calculatedScore)
       const heighLightArray = HeighLightAllArray(matrix, taskMatrix)
-      console.log('test: ', heighLightArray)
-      setHeighLiht(heighLightArray)
+      console.log('heigh light: ', heighLightArray)
+      setHeighLight(heighLightArray)
       setBackgroundColor(heighLightArray)
     }
   }, [matrix, taskMatrix])
 
   // 设置背景颜色
   useEffect(() => {
-    if (cellArray) {
-      console.log(cellArray)
+    if (matrix) {
+      console.log('[effect] matrix 改变，重新设置背景颜色', matrix)
+      const heighLightArray = HeighLightAllArray(matrix, taskMatrix)
+      console.log('[heigh light] PlayArea.tsx: ', heighLightArray)
+      setHeighLight(heighLightArray)
+      setBackgroundColor(heighLightArray)
     }
-  })
-  // 设置背景颜色
+  }, [matrix])
+
+  // 移除所有高亮
+  function resetHeighLight() {
+    console.log('[heigh light cell]: 重置高亮: ', matrix)
+    matrix.forEach((row, rowIndex) => {
+      row.forEach((cell, colIndex) => {
+        const heigLightCellElement = document.getElementById(
+          `${rowIndex}-${colIndex}`
+        )
+        if (!heigLightCellElement) {
+          console.error(`Matrix element not found for ${rowIndex}-${colIndex}`)
+          return
+        }
+        console.log('Resetting highlight for element', heigLightCellElement)
+        // Remove all background classes
+        heigLightCellElement.className = heigLightCellElement.className
+          .split(' ')
+          .filter((c) => !c.startsWith('bg-'))
+          .join(' ')
+        // Reset to default style if needed
+        heigLightCellElement.style.backgroundColor = ''
+      })
+    })
+  }
+  // 设置 cell 背景颜色
   function setBackgroundColor(heighLightCellArray: [number, number][][]) {
+    resetHeighLight()
+    console.log('[UPDATE] heigh light cell array')
     // console.log('[BG color]', heighLightCellArray)
-    // const cellArray: [number, number][] = []
+    const cellArray: [number, number][] = []
     // console.log('[BG color]', heighLightCellArray)
     heighLightCellArray.forEach((cell, cellIndex) => {
       // console.log('cell: ', cell, 'cell index', cellIndex)
@@ -86,27 +116,37 @@ const PlayMatrixArea = () => {
     // console.log('should light cell array: ', cellArray)
     cellArray.map((cell, cellIndex) => {
       // console.log('high light: ', cell[0], '-', cell[1])
-      const hlCellElement = document.getElementById(
+      const heigLightCellElement = document.getElementById(
         `${cell[0]}-${cell[1]}`
       ) as HTMLElement
-      if (!hlCellElement) {
-        console.error('Matrix table not found')
+      if (!heigLightCellElement) {
+        console.error('Matrix element not found')
         return
       }
+      console.log('heig light cell element', heigLightCellElement)
       // console.log(
       //   'cell color: ',
       //   getCellBackgroundColor(matrix[cell[0]][cell[1]])
       // )
-      hlCellElement.classList.remove(
+
+      heigLightCellElement.classList.remove(
         'bg-opacity-30',
         'backdrop-blur-md',
-        'block'
+        'block',
+        'bg-red-700',
+        'bg-green-500',
+        'bg-blue-700',
+        'bg-yellow-300',
+        'bg-purple-500',
+        'bg-gray-300',
+        'bg-white'
       )
 
-      hlCellElement.classList.add(
+      // 在指定的位置添加背景色
+      heigLightCellElement.classList.add(
         `${getCellBackgroundColor(matrix[cell[0]][cell[1]])}`
       )
-      hlCellElement.classList.add('transition', 'duration-300')
+      // heigLightCellElement.classList.add('transition', 'duration-300')
     })
   }
 
@@ -148,6 +188,8 @@ const PlayMatrixArea = () => {
           '[INFO] PlayMatrixArea: 删除后的矩阵',
           updatedMatrix[rowIndex]
         )
+        // 更新 matrix
+        setMatrix(updatedMatrix)
       } else {
         console.log(
           '[INFO] PlayMatrixArea: 点击的位置是 CellMatrix，执行添加 # 的操作'
@@ -181,7 +223,7 @@ const PlayMatrixArea = () => {
     [matrix, calculateAndUpdateScore]
   )
 
-  // Helper functions
+  // 计算矩阵中 # 的数量
   const countHashes = (matrix: MatrixType) => {
     return matrix.reduce(
       (count, row) =>
@@ -190,7 +232,7 @@ const PlayMatrixArea = () => {
     )
   }
 
-  // 删除
+  // 删除矩阵中的 #
   const deleteHash = (
     matrix: MatrixType,
     originalMatrix: MatrixType,
@@ -206,7 +248,7 @@ const PlayMatrixArea = () => {
       console.error('Invalid matrix or row index in deleteHash')
       return matrix
     }
-    // 算法
+    // 创建一个新的矩阵，以避免直接修改原始矩阵
     const updatedMatrix = matrix.map((row) => [...row])
     updatedMatrix[rowIndex] = updateArray(
       originalMatrix[rowIndex],
@@ -216,12 +258,15 @@ const PlayMatrixArea = () => {
     return updatedMatrix
   }
 
+  // 更新矩阵中的 #
   const addHash = (matrix: MatrixType, rowIndex: number, colIndex: number) => {
     const updatedMatrix = matrix.map((row) => [...row])
     for (let i = updatedMatrix[rowIndex].length - 1; i > colIndex; i--) {
       updatedMatrix[rowIndex][i] = updatedMatrix[rowIndex][i - 1]
     }
     updatedMatrix[rowIndex][colIndex] = '#'
+    // 更新矩阵
+    setMatrix(updatedMatrix)
     return updatedMatrix
   }
 
@@ -328,8 +373,10 @@ const PlayMatrixArea = () => {
                       <Image
                         src={getCatImage(cell)}
                         alt={cell}
-                        fill
-                        sizes="(max-width: 32px) 10vw, (max-width: 32px) 5vw, 3vw"
+                        width={48}
+                        height={48}
+                        // fill
+                        // sizes="(max-width: 32px) 10vw, (max-width: 32px) 5vw, 3vw"
                         style={{
                           objectFit: 'cover',
                         }}

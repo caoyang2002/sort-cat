@@ -1,5 +1,5 @@
 export const CatSrc = {
-  A: '/images/01.jpg',
+  A: '/images/019.jpg',
   B: '/images/02.jpg',
   C: '/images/03.jpg',
   D: '/images/04.jpg',
