@@ -7,7 +7,8 @@ import '@aptos-labs/wallet-adapter-ant-design/dist/index.css'
 import '../styles/wallet.css'
 import Image from 'next/image'
 import WalletMenu from './WalletMenu'
-import { useWallet } from '@aptos-labs/wallet-adapter-react'
+// import { useWallet } from '@aptos-labs/wallet-adapter-react'
+// import { useWallet } from '@aptos-labs/wallet-adapter-react'
 
 function HoverPopover() {
   const [isOpenAbout, setIsOpenAbout] = useState(false)
@@ -17,7 +18,7 @@ function HoverPopover() {
   // const [accountAddress, setAccountAddress] = useState('')
   // const [isModalOpen, setIsModalOpen] = useState(false)
 
-  const { account, signAndSubmitTransaction } = useWallet()
+  // const { account, signAndSubmitTransaction } = useWallet()
   // const handleButtonClick = () => {
   //   setAccountAddress(account?.address || 'none')
   //   console.log('account address: ', account?.address)
@@ -152,35 +153,30 @@ function HoverPopover() {
                           <div>
                             <a
                               className="px-2 py-2 mt-2 bg-opacity-60 backdrop-blur-xl block rounded-lg transition hover:bg-white/5"
-                              href="#"
+                              href="https://http.cat"
                             >
                               <p className="font-semibold text-white ">
                                 Resource
                               </p>
-                              <a
-                                href="https://http.cat"
-                                className="text-white/50"
-                              >
-                                http.cat
-                              </a>
+                              <p>http.cat</p>
                             </a>
                             <a
                               className="px-2 py-2 mt-2 bg-opacity-60 backdrop-blur-xl block rounded-lg transition hover:bg-white/5"
-                              href="#"
+                              href="https://chyraw.com"
                             >
                               <p className="font-semibold text-white ">Idea</p>
                               <p className="text-white/50">Science</p>
+                              <p className="text-white/50">Chyraw Labs</p>
                             </a>
                             <a
                               className="px-2 py-2 mt-2 bg-opacity-60 backdrop-blur-xl block rounded-lg transition hover:bg-white/5"
-                              href="#"
+                              href="/team"
                             >
                               <p className="font-semibold text-white ">
                                 Developer
                               </p>
-                              <p className="text-white/50">
-                                Simons from Chyraw labs
-                              </p>
+                              <p className="text-white/50">Simons</p>
+                              <p className="text-white/50">Yongbye</p>
                             </a>
                           </div>
                         </div>
@@ -190,30 +186,34 @@ function HoverPopover() {
                 </Popover>
               </div>
               <div className="flex-1 justify-center">
-                <Image
-                  src="/assets/twitter-x.svg"
-                  alt="logo"
-                  width={32}
-                  height={32}
-                  style={{
-                    width: '32px',
-                    height: '32px',
-                    objectFit: 'contain',
-                  }}
-                />
+                <a href="https://x.com/caoyang2002">
+                  <Image
+                    src="/assets/twitter-x.svg"
+                    alt="logo"
+                    width={32}
+                    height={32}
+                    style={{
+                      width: '32px',
+                      height: '32px',
+                      objectFit: 'contain',
+                    }}
+                  />
+                </a>
               </div>
               <div className="flex-1 justify-center">
-                <Image
-                  src="/assets/github-mark-white.svg"
-                  alt="logo"
-                  width={32}
-                  height={32}
-                  style={{
-                    width: '32px',
-                    height: '32px',
-                    objectFit: 'contain',
-                  }}
-                />
+                <a href="https://github.com/caoyang2002">
+                  <Image
+                    src="/assets/github-mark-white.svg"
+                    alt="logo"
+                    width={32}
+                    height={32}
+                    style={{
+                      width: '32px',
+                      height: '32px',
+                      objectFit: 'contain',
+                    }}
+                  />
+                </a>
               </div>
             </div>
           </div>

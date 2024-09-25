@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { WalletSelector } from '@aptos-labs/wallet-adapter-ant-design'
 import {
   Popover,
@@ -8,12 +8,70 @@ import {
 } from '@headlessui/react'
 import { useWallet } from '@aptos-labs/wallet-adapter-react'
 import { Fragment } from 'react'
+// import { get } from 'http'
+import {
+  // AccountAddressInput,
+  Aptos,
+  AptosConfig,
+  Network,
+} from '@aptos-labs/ts-sdk'
+import BigNumber from 'bignumber.js'
+interface ResponseBalanceType {
+  current_fungible_asset_balances: Array<{ amount: number; asset_type: string }>
+}
+//
 
 const WalletMenu = () => {
-  const { connected, disconnect, account, signAndSubmitTransaction } =
-    useWallet()
+  const { connected, disconnect, account } = useWallet()
+
+  const fetchBalance = async () => {
+    if (!account) return
+    const variablesObj = {
+      address: account?.address,
+    }
+
+    const query_syntax = `query GetFungibleAssetBalances($address: String, $offset: Int) {
+    current_fungible_asset_balances(
+      where: {owner_address: {_eq: $address}},
+      offset: $offset,
+      limit: 100,
+      order_by: {amount: desc}
+    ) {
+      asset_type
+      amount
+      __typename
+    }
+  }`
+
+    try {
+      const response = await aptos.queryIndexer({
+        query: {
+          query: query_syntax,
+          variables: variablesObj,
+        },
+      })
+      const amountOriginal = (response as ResponseBalanceType)
+        .current_fungible_asset_balances[0].amount
+      const amount = new BigNumber(amountOriginal)
+      // console.log('the response is ', amount)
+      const factor = new BigNumber(10).pow(8)
+      setBalance(amount.dividedBy(factor).toString())
+    } catch (error) {
+      console.error('查询 balance 时发生错误:', error)
+    }
+  }
+
+  useEffect(() => {
+    fetchBalance()
+  }, [account]) // 当 account 更改时重新执行
+
+  const config = new AptosConfig({ network: Network.TESTNET })
+  const aptos = new Aptos(config)
+
   const [isModalOpen, setModalOpen] = useState(false)
-  const [balance, setBalance] = useState(0)
+  const [balance, setBalance] = useState('0')
+
+  // ui
   if (!connected) {
     return (
       <WalletSelector isModalOpen={isModalOpen} setModalOpen={setModalOpen} />
@@ -71,15 +129,19 @@ const WalletMenu = () => {
               <div className="divide-y divide-gray-100">
                 <div className="px-1 py-1">
                   <button
-                    className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-white hover:bg-gray-500 hover:text-white"
+                    className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-white hover:bg-opacity-20 hover:backdrop-blur-sm hover:text-white hover:bg-white/10"
                     onClick={() => {
-                      /* 添加您的操作 */
+                      fetchBalance()
                     }}
                   >
-                    Balance
+                    <div className="flex items-center justify-between w-full">
+                      <p>Balance</p>
+
+                      <p className="text-gray-100 ml-2">{balance}</p>
+                    </div>
                   </button>
                   <button
-                    className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-white hover:bg-gray-500 hover:text-white"
+                    className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-white hover:bg-opacity-20 hover:backdrop-blur-sm hover:text-white hover:bg-white/10"
                     onClick={() => {
                       /* 添加您的操作 */
                     }}
@@ -87,7 +149,7 @@ const WalletMenu = () => {
                     History
                   </button>
                   <button
-                    className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-white hover:bg-gray-500 hover:text-white"
+                    className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-white hover:bg-opacity-20 hover:backdrop-blur-sm hover:text-white hover:bg-white/10"
                     onClick={() => {}}
                   >
                     Ranking
@@ -95,7 +157,7 @@ const WalletMenu = () => {
                 </div>
                 <div className="px-1 py-1">
                   <button
-                    className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-red-200 hover:bg-red-500 hover:text-white"
+                    className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-red-200 hover:bg-opacity-20 hover:backdrop-blur-sm hover:text-red-600 hover:bg-white/10"
                     onClick={disconnect}
                   >
                     Disconnect

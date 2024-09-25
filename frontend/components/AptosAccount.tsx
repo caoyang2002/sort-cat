@@ -1,4 +1,4 @@
-import { Account, Aptos, AptosConfig, Network } from '@aptos-labs/ts-sdk'
+// import { Aptos, AptosConfig, Network } from '@aptos-labs/ts-sdk'
 import { useWallet } from '@aptos-labs/wallet-adapter-react'
 import React from 'react'
 
@@ -6,10 +6,10 @@ const AptosAccount: React.FC = () => {
   // console.log('进入AptosAccount组件')
 
   // Setup the client
-  const config = new AptosConfig({ network: Network.TESTNET })
-  const aptos = new Aptos(config)
+  // const config = new AptosConfig({ network: Network.TESTNET })
+  // const aptos = new Aptos(config)
   // console.log(aptos)
-  const { account, signAndSubmitTransaction } = useWallet()
+  const { account } = useWallet()
   // console.log()
 
   // 定义一个状态来存储输出的文字

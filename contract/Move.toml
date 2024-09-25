@@ -1,0 +1,15 @@
+[package]
+name = "sortcat"
+version = "1.0.0"
+authors = []
+
+[addresses]
+sortcat = '0xc0e3685f993b18c4f6c1a4bdf7ed91144a58b225938486198ea1e80b740119b2'
+[dev-addresses]
+
+[dependencies.AptosFramework]
+git = "https://github.com/aptos-labs/aptos-core.git"
+rev = "mainnet"
+subdir = "aptos-move/framework/aptos-framework"
+
+[dev-dependencies]
