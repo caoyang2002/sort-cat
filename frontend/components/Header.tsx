@@ -58,7 +58,7 @@ function HoverPopover() {
           <div className="flex-none justify-start px-2">
             <a href="#">
               <Image
-                src="/assets/chyraw.svg"
+                src="/assets/cat-head.svg"
                 alt="logo"
                 width={40}
                 height={40}

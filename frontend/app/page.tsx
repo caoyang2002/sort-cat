@@ -1,5 +1,6 @@
 import DynamicScrollingImage from '@/components/DynamicScrollingImage'
 import FlowField from '@/components/FlowField '
+import Footer from '@/components/Footer'
 import Header from '@/components/Header'
 // import InstancedParticles from '@/components/InstancedParticles'
 // import Particles from '@/components/Particles'
@@ -51,6 +52,7 @@ export default function Home() {
         {/* <Particles /> */}
         <PlayArea />
         {/* <InstancedParticles /> */}
+        <Footer />
       </div>
     </>
   )

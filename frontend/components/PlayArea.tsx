@@ -391,9 +391,6 @@ const PlayMatrixArea = () => {
           </div>
         </div>
       </main>
-      <footer>
-        <p className="flex items-center justify-center">Power by CaoYang2002</p>
-      </footer>
     </>
   )
 }
