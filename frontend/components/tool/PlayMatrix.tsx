@@ -15,7 +15,7 @@ function Matrix(
   max: number,
   min: number
 ): string[][] {
-  console.log('matrix: ', rows, '-', cols, '-', max, '-', min)
+  // console.log('matrix: ', rows, '-', cols, '-', max, '-', min)
 
   // 生成一行的函数
   const generateRow = (): string[] => {
@@ -39,7 +39,7 @@ function Matrix(
   // 创建整个矩阵
   const matrix = Array.from({ length: rows }, generateRow)
 
-  console.log('matrix: ', matrix)
+  // console.log('matrix: ', matrix)
 
   return matrix
 }

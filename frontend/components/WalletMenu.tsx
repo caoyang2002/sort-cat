@@ -1,14 +1,19 @@
-'use client'
 import React, { useState } from 'react'
 import { WalletSelector } from '@aptos-labs/wallet-adapter-ant-design'
-import { Popover, Transition } from '@headlessui/react'
+import {
+  Popover,
+  Transition,
+  PopoverButton,
+  PopoverPanel,
+} from '@headlessui/react'
 import { useWallet } from '@aptos-labs/wallet-adapter-react'
 import { Fragment } from 'react'
 
 const WalletMenu = () => {
-  const { connected, disconnect } = useWallet()
+  const { connected, disconnect, account, signAndSubmitTransaction } =
+    useWallet()
   const [isModalOpen, setModalOpen] = useState(false)
-
+  const [balance, setBalance] = useState(0)
   if (!connected) {
     return (
       <WalletSelector isModalOpen={isModalOpen} setModalOpen={setModalOpen} />
@@ -19,13 +24,19 @@ const WalletMenu = () => {
     <Popover className="relative">
       {({ open }) => (
         <>
-          <Popover.Button
+          <PopoverButton
             className={`
-              ${open ? 'text-white bg-blue-700' : 'text-white bg-blue-600'}
-              inline-flex items-center px-4 py-2 text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75
-            `}
+              ${open ? 'text-white bg-gray-700' : 'text-white bg-gray-500'}
+              inline-flex items-center px-4 py-2 text-sm font-medium rounded-md hover:bg-white hover:text-black text-white focus-visible:text-gray-700 focus-visible:bg-gray-100`}
           >
-            <span>Wallet</span>
+            <span className="font-bold">
+              {account?.address && account.address.length > 8
+                ? `${account.address.slice(0, 6)}...${account.address.slice(
+                    -4
+                  )}`
+                : account?.address || ''}
+            </span>
+
             <svg
               className={`${
                 open ? 'transform rotate-180' : ''
@@ -41,7 +52,7 @@ const WalletMenu = () => {
                 clipRule="evenodd"
               />
             </svg>
-          </Popover.Button>
+          </PopoverButton>
           <Transition
             as={Fragment}
             enter="transition ease-out duration-200"
@@ -51,34 +62,47 @@ const WalletMenu = () => {
             leaveFrom="opacity-100 translate-y-0"
             leaveTo="opacity-0 translate-y-1"
           >
-            <Popover.Panel className="absolute right-0 z-10 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none">
-              <div className="px-1 py-1">
-                <button
-                  className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-gray-900 hover:bg-blue-500 hover:text-white"
-                  onClick={() => {
-                    /* 添加您的操作 */
-                  }}
-                >
-                  查看余额
-                </button>
-                <button
-                  className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-gray-900 hover:bg-blue-500 hover:text-white"
-                  onClick={() => {
-                    /* 添加您的操作 */
-                  }}
-                >
-                  交易历史
-                </button>
+            <PopoverPanel
+              transition
+              anchor="bottom"
+              static
+              className="absolute z-10 mt-1 w-48 p-1 bg-white border rounded shadow-md divide-y divide-white/5 rounded-xl bg-white/5 text-sm/6 transition  ease-in-out  bg-opacity-20 backdrop-blur-sm"
+            >
+              <div className="divide-y divide-gray-100">
+                <div className="px-1 py-1">
+                  <button
+                    className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-white hover:bg-gray-500 hover:text-white"
+                    onClick={() => {
+                      /* 添加您的操作 */
+                    }}
+                  >
+                    Balance
+                  </button>
+                  <button
+                    className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-white hover:bg-gray-500 hover:text-white"
+                    onClick={() => {
+                      /* 添加您的操作 */
+                    }}
+                  >
+                    History
+                  </button>
+                  <button
+                    className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-white hover:bg-gray-500 hover:text-white"
+                    onClick={() => {}}
+                  >
+                    Ranking
+                  </button>
+                </div>
+                <div className="px-1 py-1">
+                  <button
+                    className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-red-200 hover:bg-red-500 hover:text-white"
+                    onClick={disconnect}
+                  >
+                    Disconnect
+                  </button>
+                </div>
               </div>
-              <div className="px-1 py-1">
-                <button
-                  className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-gray-900 hover:bg-red-500 hover:text-white"
-                  onClick={disconnect}
-                >
-                  断开连接
-                </button>
-              </div>
-            </Popover.Panel>
+            </PopoverPanel>
           </Transition>
         </>
       )}

@@ -7,7 +7,7 @@ import '@aptos-labs/wallet-adapter-ant-design/dist/index.css'
 import '../styles/wallet.css'
 import Image from 'next/image'
 import WalletMenu from './WalletMenu'
-// import { useWallet } from '@aptos-labs/wallet-adapter-react'
+import { useWallet } from '@aptos-labs/wallet-adapter-react'
 
 function HoverPopover() {
   const [isOpenAbout, setIsOpenAbout] = useState(false)
@@ -17,7 +17,7 @@ function HoverPopover() {
   // const [accountAddress, setAccountAddress] = useState('')
   // const [isModalOpen, setIsModalOpen] = useState(false)
 
-  // const { account, signAndSubmitTransaction } = useWallet()
+  const { account, signAndSubmitTransaction } = useWallet()
   // const handleButtonClick = () => {
   //   setAccountAddress(account?.address || 'none')
   //   console.log('account address: ', account?.address)
@@ -61,11 +61,11 @@ function HoverPopover() {
 
   return (
     <>
-      <div className="flex justify-center w-full py-2 px-2 rounded-lg bg-opacity-30 backdrop-blur-md block">
+      <div className="flex justify-center w-full py-2 px-2 rounded-lg bg-opacity-10 backdrop-blur-sm block">
         <div className="flex justify-between w-full max-w-4xl items-center ">
           {/* LOGO */}
           <div className="flex-none justify-center px-2">
-            <a href="#" className="flex justify-between  items-center">
+            <a href="/" className="flex justify-between  items-center">
               <Image
                 className="flex-1 justify-start"
                 src="/assets/cat-head.svg"
@@ -102,17 +102,29 @@ function HoverPopover() {
                         <div className="p-3">
                           <a
                             className="px-2 py-2 bg-opacity-30 backdrop-blur-md block rounded-lg transition hover:bg-white/5"
+                            href="/what"
+                          >
+                            <p className="font-semibold text-white">What</p>
+                            <p className="text-white/50">
+                              What do the pictures of cats mean respectively?
+                            </p>
+                          </a>
+
+                          <a
+                            className="px-2 py-2 mt-2 bg-opacity-30 backdrop-blur-md block rounded-lg transition hover:bg-white/5"
                             href="#"
                           >
-                            <p className="font-semibold text-white">Name</p>
-                            <p className="text-white/50">玩法介绍</p>
+                            <p className="font-semibold text-white ">Way</p>
+                            <p className="text-white/50">Ways to play?</p>
                           </a>
                           <a
                             className="px-2 py-2 mt-2 bg-opacity-30 backdrop-blur-md block rounded-lg transition hover:bg-white/5"
                             href="#"
                           >
-                            <p className="font-semibold text-white ">Name</p>
-                            <p className="text-white/50">玩法介绍</p>
+                            <p className="font-semibold text-white ">How</p>
+                            <p className="text-white/50">
+                              How are the scores calculated?
+                            </p>
                           </a>
                         </div>
                       </PopoverPanel>
@@ -139,35 +151,36 @@ function HoverPopover() {
                         <div className="p-3">
                           <div>
                             <a
-                              className="px-2 py-2 bg-opacity-60 backdrop-blur-xl block rounded-lg transition hover:bg-white/5"
+                              className="px-2 py-2 mt-2 bg-opacity-60 backdrop-blur-xl block rounded-lg transition hover:bg-white/5"
                               href="#"
                             >
-                              <p className="font-semibold text-white ">Score</p>
-                              <p className="text-white/50">descript</p>
+                              <p className="font-semibold text-white ">
+                                Resource
+                              </p>
+                              <a
+                                href="https://http.cat"
+                                className="text-white/50"
+                              >
+                                http.cat
+                              </a>
                             </a>
-                          </div>
-                          <div>
+                            <a
+                              className="px-2 py-2 mt-2 bg-opacity-60 backdrop-blur-xl block rounded-lg transition hover:bg-white/5"
+                              href="#"
+                            >
+                              <p className="font-semibold text-white ">Idea</p>
+                              <p className="text-white/50">Science</p>
+                            </a>
                             <a
                               className="px-2 py-2 mt-2 bg-opacity-60 backdrop-blur-xl block rounded-lg transition hover:bg-white/5"
                               href="#"
                             >
                               <p className="font-semibold text-white ">
-                                Insert
+                                Developer
                               </p>
-                              <p className="text-white/50">insert blocks</p>
-                            </a>
-                          </div>
-                          <div>
-                            <a
-                              className="px-2 py-2 mt-2 bg-opacity-60 backdrop-blur-xl block rounded-lg transition hover:bg-white/5"
-                              href="#"
-                            >
-                              <p className="font-semibold text-white ">
-                                Us Team
+                              <p className="text-white/50">
+                                Simons from Chyraw labs
                               </p>
-                              <p className="text-white/50">Simons</p>
-                              <p className="text-white/50">Chen</p>
-                              <p className="text-white/50">Chyraw labs</p>
                             </a>
                           </div>
                         </div>

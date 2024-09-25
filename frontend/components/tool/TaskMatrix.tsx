@@ -7,7 +7,7 @@ import { Nucleotide } from '../CellBackgroundColor'
  * @returns 矩阵。
  */
 function Task(rows: number, cols: number): string[][] {
-  console.log('task: ', rows, '-', cols)
+  // console.log('task: ', rows, '-', cols)
   // 用于生成矩阵的函数
   const generateRow = (): number[] => {
     // 创建一个空行
@@ -36,7 +36,7 @@ function Task(rows: number, cols: number): string[][] {
 
   // 生成指定数量的行
   const matrix = Array.from({ length: rows }, generateRow)
-  console.log('task: ', matrix)
+  // console.log('task: ', matrix)
   return matrix as unknown as string[][]
 }
 

@@ -13,3 +13,13 @@ export const Cat = ['A', 'B', 'C', 'D', 'E']
 export const getCatImage = (cat: string) => {
   return `${CatSrc[cat as keyof typeof CatSrc] || '/images/08.jpg'}`
 }
+
+export const CatCaption = {
+  A: 'Elements that need to be aligned',
+  B: 'Elements that need to be aligned',
+  C: 'Elements that need to be aligned',
+  D: 'Elements that need to be aligned',
+  E: 'Elements that need to be aligned',
+  '#': 'Spaces that can be used',
+  '0': 'Blank blocks',
+}

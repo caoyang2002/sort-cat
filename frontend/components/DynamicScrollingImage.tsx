@@ -54,9 +54,9 @@ const DynamicScrollingImage: React.FC<DynamicScrollingImageProps> = ({
             <Image
               src={src}
               alt={`Scrolling image ${index + 1}`}
-              layout="fill"
-              objectFit="cover"
-              className="px-1 py-1 rounded rounded-lg "
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              className="object-cover px-1 py-1 rounded-lg"
             />
           </div>
         ))}

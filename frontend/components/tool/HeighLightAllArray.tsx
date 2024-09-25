@@ -6,16 +6,16 @@ function HeighLightAllArray(
   task: string[][] | undefined
 ): [number, number][][] {
   if (!matrix || !task || matrix.length === 0 || task.length === 0) {
-    console.log('Score: Invalid input. Returning 0.')
+    // console.log('Score: Invalid input. Returning 0.')
     return []
   }
-  console.log('=========== HeighLightAllArray.tsx ===========')
+  // console.log('=========== HeighLightAllArray.tsx ===========')
   const matrixRows = matrix.length
   const matrixCols = matrix[0].length
-  console.log('matrix 行', matrixRows, matrixCols)
+  // console.log('matrix 行', matrixRows, matrixCols)
   const taskRows = task.length
   const taskCols = task[0].length
-  console.log('task 行', taskRows, taskCols)
+  // console.log('task 行', taskRows, taskCols)
 
   const heighLightArray = []
   // 将匹配的  matrix[matrixRow][col] 放入 matchArray
@@ -79,7 +79,7 @@ function HeighLightAllArray(
       }
     }
   }
-  console.log('[heigh light] HeighLightAllArray.tsx: ', heighLightArray)
+  // console.log('[heigh light] HeighLightAllArray.tsx: ', heighLightArray)
 
   return heighLightArray
 }

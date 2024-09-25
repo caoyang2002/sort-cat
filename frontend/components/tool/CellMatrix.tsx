@@ -7,7 +7,7 @@
  * @returns 矩阵。
  */
 function Cell(rows: number, cols: number): string[][] {
-  console.log('[INFO] Cell: ', rows, '-', cols)
+  // console.log('[INFO] Cell: ', rows, '-', cols)
   // 用于生成矩阵的函数
   const generateRow = (): number[] => {
     // 创建一个空行
@@ -21,7 +21,7 @@ function Cell(rows: number, cols: number): string[][] {
     { length: rows },
     generateRow
   ) as unknown as string[][]
-  console.log('[INFO] Cell: ', matrix)
+  // console.log('[INFO] Cell: ', matrix)
   return matrix
 }
 

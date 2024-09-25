@@ -1,4 +1,4 @@
-import HeighLightAllArray from './tool/HeighLightAllArray'
+// import HeighLightAllArray from './tool/HeighLightAllArray'
 export const CELL_BACKGROUND_COLOR = {
   A: 'bg-red-700', // Red
   B: 'bg-green-500', // Green
@@ -11,23 +11,23 @@ export const CELL_BACKGROUND_COLOR = {
 
 export const Nucleotide = ['A', 'B', 'C', 'D', 'E']
 
-export const getBackgroundColor = (
-  playMatrix: string[][],
-  taskMatrix: string[][]
-) => {
-  console.log('========== CellBackgroundColor.tsx ==========')
-  console.log(
-    '--------------------------\nplay matrix: ',
-    playMatrix,
-    'task matrix: ',
-    taskMatrix
-  )
+// export const getBackgroundColor = (
+//   playMatrix: string[][],
+//   taskMatrix: string[][]
+// ) => {
+//   // console.log('========== CellBackgroundColor.tsx ==========')
+//   // console.log(
+//   //   '--------------------------\nplay matrix: ',
+//   //   playMatrix,
+//   //   'task matrix: ',
+//   //   taskMatrix
+//   // )
 
-  const heighLightArray = HeighLightAllArray(playMatrix, taskMatrix)
-  console.log('-------- high light array ----------\n', heighLightArray)
+//   const heighLightArray = HeighLightAllArray(playMatrix, taskMatrix)
+//   // console.log('-------- high light array ----------\n', heighLightArray)
 
-  return 'bg-opacity-30'
-}
+//   return 'bg-opacity-30'
+// }
 
 export const getCellBackgroundColor = (cell: string) => {
   // console.log('[INFO] Nucleotide.tsx: ', cell)

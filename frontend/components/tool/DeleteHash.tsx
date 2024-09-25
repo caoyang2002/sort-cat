@@ -21,6 +21,6 @@ export default function updateArray(
   if (nextIndex < original.length) {
     caseArray.push(original[nextIndex])
   }
-  console.log('[INFO] DeleteHash: ', caseArray)
+  // console.log('[INFO] DeleteHash: ', caseArray)
   return caseArray
 }

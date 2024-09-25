@@ -48,7 +48,7 @@ const PlayMatrixArea = () => {
       const calculatedScore = Score(matrix, taskMatrix)
       setScore(calculatedScore)
       const heighLightArray = HeighLightAllArray(matrix, taskMatrix)
-      console.log('heigh light: ', heighLightArray)
+      // console.log('heigh light: ', heighLightArray)
       // setHeighLight(heighLightArray)
 
       setBackgroundColor(heighLightArray)
@@ -58,9 +58,9 @@ const PlayMatrixArea = () => {
   // 设置背景颜色
   useEffect(() => {
     if (matrix) {
-      console.log('[effect] matrix 改变，重新设置背景颜色', matrix)
+      // console.log('[effect] matrix 改变，重新设置背景颜色', matrix)
       const heighLightArray = HeighLightAllArray(matrix, taskMatrix)
-      console.log('[heigh light] PlayArea.tsx: ', heighLightArray)
+      // console.log('[heigh light] PlayArea.tsx: ', heighLightArray)
       // setHeighLight(heighLightArray)
       setBackgroundColor(heighLightArray)
     }
@@ -68,7 +68,7 @@ const PlayMatrixArea = () => {
 
   // 移除所有高亮
   function resetHeighLight() {
-    console.log('[heigh light cell]: 重置高亮: ', matrix)
+    // console.log('[heigh light cell]: 重置高亮: ', matrix)
     matrix.forEach((row, rowIndex) => {
       row.forEach((cell, colIndex) => {
         const heigLightCellElement = document.getElementById(
@@ -78,7 +78,7 @@ const PlayMatrixArea = () => {
           console.error(`Matrix element not found for ${rowIndex}-${colIndex}`)
           return
         }
-        console.log('Resetting highlight for element', heigLightCellElement)
+        // console.log('Resetting highlight for element', heigLightCellElement)
         // Remove all background classes
         heigLightCellElement.className = heigLightCellElement.className
           .split(' ')
@@ -92,7 +92,7 @@ const PlayMatrixArea = () => {
   // 设置 cell 背景颜色
   function setBackgroundColor(heighLightCellArray: [number, number][][]) {
     resetHeighLight()
-    console.log('[UPDATE] heigh light cell array')
+    // console.log('[UPDATE] heigh light cell array')
     // console.log('[BG color]', heighLightCellArray)
     const cellArray: [number, number][] = []
     // console.log('[BG color]', heighLightCellArray)
@@ -121,7 +121,7 @@ const PlayMatrixArea = () => {
         console.error('Matrix element not found')
         return
       }
-      console.log('heig light cell element', heigLightCellElement)
+      // console.log('heig light cell element', heigLightCellElement)
       // console.log(
       //   'cell color: ',
       //   getCellBackgroundColor(matrix[cell[0]][cell[1]])
@@ -149,25 +149,25 @@ const PlayMatrixArea = () => {
   }
 
   const calculateAndUpdateScore = useCallback(() => {
-    console.log('[INFO] PlayMatrixArea: 开始计算和更新分数')
+    // console.log('[INFO] PlayMatrixArea: 开始计算和更新分数')
     const result = Score(matrix, taskMatrix)
     setScore(result)
-    console.log('[INFO] PlayMatrixArea: 分数: ', result)
+    // console.log('[INFO] PlayMatrixArea: 分数: ', result)
   }, [matrix, score])
 
   // 处理点击位置
   const handleCellMatrixClick = useCallback(
     (rowIndex: number, colIndex: number) => {
-      console.log(
-        '[HANDLE] PlayMatrixArea: ####################### 开始处理点击位置 #######################'
-      )
-      console.log('[INFO] PlayMatrixArea: 点击位置：', rowIndex, '-', colIndex)
+      // console.log(
+      //   '[HANDLE] PlayMatrixArea: ####################### 开始处理点击位置 #######################'
+      // )
+      // console.log('[INFO] PlayMatrixArea: 点击位置：', rowIndex, '-', colIndex)
 
       const currentMatrix = matrix.map((row) => [...row])
       const clickedCellMatrix = currentMatrix[rowIndex][colIndex]
 
       if (clickedCellMatrix === '0') {
-        console.log('[INFO] 点击的位置是 0，不执行任何操作')
+        // console.log('[INFO] 点击的位置是 0，不执行任何操作')
         return
       }
 
@@ -175,30 +175,30 @@ const PlayMatrixArea = () => {
       // let updatedCellMatrix
 
       if (clickedCellMatrix === '#') {
-        console.log('[INFO] PlayMatrixArea: 点击的位置是 #，执行删除 # 的操作')
+        // console.log('[INFO] PlayMatrixArea: 点击的位置是 #，执行删除 # 的操作')
         updatedMatrix = deleteHash(
           currentMatrix,
           originalMatrix,
           rowIndex,
           colIndex
         )
-        console.log(
-          '[INFO] PlayMatrixArea: 删除后的矩阵',
-          updatedMatrix[rowIndex]
-        )
+        // console.log(
+        //   '[INFO] PlayMatrixArea: 删除后的矩阵',
+        //   updatedMatrix[rowIndex]
+        // )
         // 更新 matrix
         setMatrix(updatedMatrix)
       } else {
-        console.log(
-          '[INFO] PlayMatrixArea: 点击的位置是 CellMatrix，执行添加 # 的操作'
-        )
+        // console.log(
+        //   '[INFO] PlayMatrixArea: 点击的位置是 CellMatrix，执行添加 # 的操作'
+        // )
         const matrixSpace = countHashes(currentMatrix)
 
         if (matrixSpace < SPACE_AMOUNT) {
-          console.log('[INFO] PlayMatrixArea: 有可用的 #')
+          // console.log('[INFO] PlayMatrixArea: 有可用的 #')
           updatedMatrix = addHash(currentMatrix, rowIndex, colIndex)
         } else {
-          console.log('[INFO] PlayMatrixArea: 没有可用的 # 了')
+          // console.log('[INFO] PlayMatrixArea: 没有可用的 # 了')
           alert('没有可用的 # 了')
           return
         }
@@ -212,11 +212,11 @@ const PlayMatrixArea = () => {
       setCellMatrix(updatedCellMatrix)
       calculateAndUpdateScore()
 
-      console.log('[INFO] PlayMatrixArea: 更新后的矩阵：', updatedMatrix)
-      console.log(
-        '[INFO] PlayMatrixArea: 更新后的 CellMatrix：',
-        updatedCellMatrix
-      )
+      // console.log('[INFO] PlayMatrixArea: 更新后的矩阵：', updatedMatrix)
+      // console.log(
+      //   '[INFO] PlayMatrixArea: 更新后的 CellMatrix：',
+      //   updatedCellMatrix
+      // )
     },
     [matrix, calculateAndUpdateScore]
   )
@@ -375,9 +375,9 @@ const PlayMatrixArea = () => {
                         height={48}
                         // fill
                         // sizes="(max-width: 32px) 10vw, (max-width: 32px) 5vw, 3vw"
-                        style={{
-                          objectFit: 'cover',
-                        }}
+                        // style={{
+                        //   objectFit: 'cover',
+                        // }}
                       />
                     </div>
 

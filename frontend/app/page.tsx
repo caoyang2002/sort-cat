@@ -1,10 +1,12 @@
 import DynamicScrollingImage from '@/components/DynamicScrollingImage'
-import FlowField from '@/components/FlowField '
+// import FlowField from '@/components/FlowField '
 import Footer from '@/components/Footer'
 import Header from '@/components/Header'
 // import InstancedParticles from '@/components/InstancedParticles'
 // import Particles from '@/components/Particles'
 import PlayArea from '@/components/PlayArea'
+import ScrollingSvgBackground from '@/components/ScrollingSVGBackground'
+
 // import SardineShoal from '@/components/SardineShoal'
 // import ThreeDRotatingLogo from '@/components/ThreeDRotatingLogo'
 
@@ -47,7 +49,16 @@ export default function Home() {
           <DynamicScrollingImage initialImages={initialImages} />
         </div>
         {/* <ThreeDRotatingLogo /> */}
-        <FlowField />
+        {/* <FlowField /> */}
+
+        <ScrollingSvgBackground
+          svgPath="/assets/cat-head-gray.svg"
+          svgSize={{ width: 32, height: 32 }}
+          scrollDirection="stop"
+          backgroundColor="#000"
+          scrollSpeed={0}
+        />
+
         {/* <SardineShoal /> */}
         {/* <Particles /> */}
         <PlayArea />

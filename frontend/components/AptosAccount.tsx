@@ -3,14 +3,14 @@ import { useWallet } from '@aptos-labs/wallet-adapter-react'
 import React from 'react'
 
 const AptosAccount: React.FC = () => {
-  console.log('进入AptosAccount组件')
+  // console.log('进入AptosAccount组件')
 
   // Setup the client
   const config = new AptosConfig({ network: Network.TESTNET })
   const aptos = new Aptos(config)
-  console.log(aptos)
+  // console.log(aptos)
   const { account, signAndSubmitTransaction } = useWallet()
-  console.log()
+  // console.log()
 
   // 定义一个状态来存储输出的文字
   const [accountAddress, setAccountAddress] = React.useState('')

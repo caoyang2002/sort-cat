@@ -5,17 +5,17 @@ function Score(
   task: string[][] | undefined
 ): number {
   if (!matrix || !task || matrix.length === 0 || task.length === 0) {
-    console.log('Score: Invalid input. Returning 0.')
+    // console.log('Score: Invalid input. Returning 0.')
     return 0
   }
 
-  console.log('score:', matrix, '-', task)
+  // console.log('score:', matrix, '-', task)
   const matrixRows = matrix.length
   const matrixCols = matrix[0].length
-  console.log('matrix 行', matrixRows, matrixCols)
+  // console.log('matrix 行', matrixRows, matrixCols)
   const taskRows = task.length
   const taskCols = task[0].length
-  console.log('task 行', taskRows, taskCols)
+  // console.log('task 行', taskRows, taskCols)
 
   let score = 0
 
