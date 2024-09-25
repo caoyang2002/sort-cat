@@ -2,10 +2,7 @@
 import { useCallback, useState, useEffect } from 'react'
 import Matrix from '@/components/tool/PlayMatrix'
 import TaskMatrix from '@/components/tool/TaskMatrix'
-import {
-  getBackgroundColor,
-  getCellBackgroundColor,
-} from './CellBackgroundColor'
+import { getCellBackgroundColor } from './CellBackgroundColor'
 import CellMatrix from '@/components/tool/CellMatrix'
 import Score from '@/components/tool/Score'
 // import { WalletSelector } from '@aptos-labs/wallet-adapter-ant-design'
@@ -21,12 +18,12 @@ const taskMatrix = TaskMatrix(1, 12)
 type MatrixType = string[][]
 type CellMatrixType = string[][]
 type ScoreType = number
-type HeighLightType = [number, number][][]
-type CellArray = [number, number][]
+// type HeighLightType = [number, number][][]
+// type CellArray = [number, number][]
 
 const PlayMatrixArea = () => {
   const [score, setScore] = useState<ScoreType>(0)
-  const [heighLight, setHeighLight] = useState<HeighLightType>([])
+  // const [heighLight, setHeighLight] = useState<HeighLightType>([])
   const [matrix, setMatrix] = useState<MatrixType>([])
   const [cellMatrix, setCellMatrix] = useState<CellMatrixType>([])
   const [isClient, setIsClient] = useState(false)
@@ -52,7 +49,8 @@ const PlayMatrixArea = () => {
       setScore(calculatedScore)
       const heighLightArray = HeighLightAllArray(matrix, taskMatrix)
       console.log('heigh light: ', heighLightArray)
-      setHeighLight(heighLightArray)
+      // setHeighLight(heighLightArray)
+
       setBackgroundColor(heighLightArray)
     }
   }, [matrix, taskMatrix])
@@ -63,7 +61,7 @@ const PlayMatrixArea = () => {
       console.log('[effect] matrix 改变，重新设置背景颜色', matrix)
       const heighLightArray = HeighLightAllArray(matrix, taskMatrix)
       console.log('[heigh light] PlayArea.tsx: ', heighLightArray)
-      setHeighLight(heighLightArray)
+      // setHeighLight(heighLightArray)
       setBackgroundColor(heighLightArray)
     }
   }, [matrix])
@@ -98,9 +96,9 @@ const PlayMatrixArea = () => {
     // console.log('[BG color]', heighLightCellArray)
     const cellArray: [number, number][] = []
     // console.log('[BG color]', heighLightCellArray)
-    heighLightCellArray.forEach((cell, cellIndex) => {
+    heighLightCellArray.forEach((cell) => {
       // console.log('cell: ', cell, 'cell index', cellIndex)
-      cell.forEach((singleCell, singleCellIndex) => {
+      cell.forEach((singleCell) => {
         // console.log(
         //   'single cell: ',
         //   singleCell,
@@ -114,7 +112,7 @@ const PlayMatrixArea = () => {
       // console.log('matrix cell: ', matrix[cell[0][0]][cell[0][1]])
     })
     // console.log('should light cell array: ', cellArray)
-    cellArray.map((cell, cellIndex) => {
+    cellArray.map((cell) => {
       // console.log('high light: ', cell[0], '-', cell[1])
       const heigLightCellElement = document.getElementById(
         `${cell[0]}-${cell[1]}`
