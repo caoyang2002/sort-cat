@@ -1,45 +1,8 @@
 import React from 'react'
 import Image from 'next/image'
-import { CatSrc, CatCaption } from '@/components/Cat'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import ScrollingSvgBackground from '@/components/ScrollingSVGBackground'
-
-const EnhancedCatGallery = () => {
-  return (
-    <div className="grid grid-cols-3 gap-4">
-      {Object.entries(CatSrc).map(([key, src]) => {
-        // 确保 key 是 CatCaption 的有效键
-        const isValidKey = key in CatCaption
-
-        return (
-          <div
-            key={key}
-            className="flex flex-col items-center transition-transform duration-300 hover:scale-105"
-          >
-            <div className="relative overflow-hidden rounded-lg">
-              {/* 使用 Next.js 的 Image 组件来优化图片加载 */}
-              <Image
-                src={src}
-                alt={`cat ${key}`}
-                width={128}
-                height={128}
-                className="transition-opacity duration-300 hover:opacity-80"
-              />
-            </div>
-            <p className="mt-2 text-center font-semibold">Cat {key}</p>
-            <p className="text-center text-sm">
-              {/* 如果 key 有效，显示对应的说明；否则显示默认文本 */}
-              {isValidKey
-                ? CatCaption[key as keyof typeof CatCaption]
-                : '暂无说明'}
-            </p>
-          </div>
-        )
-      })}
-    </div>
-  )
-}
 
 export default function Tips() {
   return (
@@ -55,8 +18,37 @@ export default function Tips() {
         backgroundColor="#000"
         scrollSpeed={0}
       />
-      {/* 猫咪画廊组件 */}
-      <EnhancedCatGallery />
+      <div className="flex flex-col items-center">
+        {/* 新增：使用 flex 容器并居中项目 */}
+        <div className="flex justify-center">
+          {/* 新增：Image 的父容器 */}
+          <Image
+            src="/assets/cat-head.svg"
+            alt="cat-head-gray"
+            width={128}
+            height={128}
+          />
+        </div>
+        <p className="text-2xl font-bold text-gray-200">
+          The left side is the usable cat,
+        </p>
+        <p className="text-2xl font-bold text-gray-200">
+          which can be used to insert in the cat view,
+        </p>
+        <p className="text-2xl font-bold text-gray-200">
+          the right side is the cat that needs to be aligned
+        </p>
+        <p className="text-2xl font-bold text-gray-200">
+          your score will be displayed in real time at the top,
+        </p>
+        <p className="text-2xl font-bold text-gray-200">
+          when you think you have done your best,{' '}
+        </p>
+        <p className="text-2xl font-bold text-gray-200">
+          you can submit your action to the blockchain.{' '}
+        </p>
+        <p className="text-4xl font-bold text-gray-100">Have a good time</p>
+      </div>
       <Footer />
     </div>
   )

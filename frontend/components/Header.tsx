@@ -113,14 +113,14 @@ function HoverPopover() {
 
                           <a
                             className="px-2 py-2 mt-2 bg-opacity-30 backdrop-blur-md block rounded-lg transition hover:bg-white/5"
-                            href="#"
+                            href="/way"
                           >
                             <p className="font-semibold text-white ">Way</p>
                             <p className="text-white/50">Ways to play?</p>
                           </a>
                           <a
                             className="px-2 py-2 mt-2 bg-opacity-30 backdrop-blur-md block rounded-lg transition hover:bg-white/5"
-                            href="#"
+                            href="/how"
                           >
                             <p className="font-semibold text-white ">How</p>
                             <p className="text-white/50">

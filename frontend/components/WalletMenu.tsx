@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { WalletSelector } from '@aptos-labs/wallet-adapter-ant-design'
 import {
   Popover,
@@ -16,18 +16,32 @@ import {
   Network,
 } from '@aptos-labs/ts-sdk'
 import BigNumber from 'bignumber.js'
+import { Dialog } from '@headlessui/react'
+import { AptosFaucetClient, FundRequest } from '@aptos-labs/aptos-faucet-client'
+
 interface ResponseBalanceType {
   current_fungible_asset_balances: Array<{ amount: number; asset_type: string }>
 }
 //
 
 const WalletMenu = () => {
+  const [isOpenHistory, setIsOpenHistory] = useState(false)
+  const [isOpenRanking, setIsOpenRanking] = useState(false)
+  const [isOpenFetchBalance, setIsOpenFetchBalance] = useState(false)
+  const [isModalOpen, setModalOpen] = useState(false)
+  const [balance, setBalance] = useState('0')
+
   const { connected, disconnect, account } = useWallet()
 
-  const fetchBalance = async () => {
-    if (!account) return
+  // 获取余额
+  const fetchBalance = useCallback(async () => {
+    const config = new AptosConfig({ network: Network.TESTNET })
+    const aptos = new Aptos(config)
+    console.log('获取余额: ', account?.address)
+    if (!account?.address) return
     const variablesObj = {
-      address: account?.address,
+      address: account.address,
+      offset: 0,
     }
 
     const query_syntax = `query GetFungibleAssetBalances($address: String, $offset: Int) {
@@ -53,23 +67,75 @@ const WalletMenu = () => {
       const amountOriginal = (response as ResponseBalanceType)
         .current_fungible_asset_balances[0].amount
       const amount = new BigNumber(amountOriginal)
-      // console.log('the response is ', amount)
+      console.log('the response is ', amount)
       const factor = new BigNumber(10).pow(8)
       setBalance(amount.dividedBy(factor).toString())
     } catch (error) {
-      console.error('查询 balance 时发生错误:', error)
+      console.error('fetchBalance error', error)
+    }
+  }, [account])
+  // 领取 faucet
+  async function callFaucet(
+    amount: number,
+    address: string
+  ): Promise<string[]> {
+    const faucetClient = new AptosFaucetClient({
+      BASE: 'https://faucet.testnet.aptoslabs.com',
+    })
+
+    const request: FundRequest = {
+      amount,
+      address,
+    }
+
+    try {
+      const response = await faucetClient.fund.fund({ requestBody: request })
+      console.log(response)
+      if ('txn_hashes' in response) {
+        return response.txn_hashes
+      } else {
+        throw new Error('Funding failed: ' + response)
+      }
+    } catch (error) {
+      console.error('Error funding account:', error)
+      throw error
     }
   }
 
+  // 领 fuacet
+  async function fetchFaucentBalance() {
+    if (!account?.address) return
+    try {
+      const result = await callFaucet(100000000, account?.address)
+      fetchBalance()
+      console.log('faucet: ', result)
+    } catch (error) {
+      console.log('Error: ', error)
+    }
+  }
+  const [cooldown, setCooldown] = useState(0)
+  useEffect(() => {
+    let timer: NodeJS.Timeout | undefined
+    if (cooldown > 0) {
+      timer = setTimeout(() => setCooldown(cooldown - 1), 1000)
+    } else {
+      setIsOpenFetchBalance(false)
+    }
+    return () => clearTimeout(timer)
+  }, [cooldown])
+
+  const handleClick = () => {
+    if (!isOpenFetchBalance) {
+      setIsOpenFetchBalance(true)
+      setCooldown(3)
+      fetchBalance()
+      fetchFaucentBalance()
+    }
+  }
+  // 获取余额
   useEffect(() => {
     fetchBalance()
-  }, [account]) // 当 account 更改时重新执行
-
-  const config = new AptosConfig({ network: Network.TESTNET })
-  const aptos = new Aptos(config)
-
-  const [isModalOpen, setModalOpen] = useState(false)
-  const [balance, setBalance] = useState('0')
+  }, [account, balance, fetchBalance]) // 当 account 更改时重新执行
 
   // ui
   if (!connected) {
@@ -129,31 +195,108 @@ const WalletMenu = () => {
               <div className="divide-y divide-gray-100">
                 <div className="px-1 py-1">
                   <button
-                    className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-white hover:bg-opacity-20 hover:backdrop-blur-sm hover:text-white hover:bg-white/10"
-                    onClick={() => {
-                      fetchBalance()
-                    }}
+                    className={`group flex rounded-md items-center w-full px-2 py-2 text-sm text-white ${
+                      isOpenFetchBalance
+                        ? 'bg-opacity-20 bg-gray-300 cursor-not-allowed'
+                        : 'hover:bg-opacity-20 hover:backdrop-blur-sm hover:text-white hover:bg-white/10'
+                    }`}
+                    onClick={handleClick}
+                    disabled={isOpenFetchBalance}
                   >
                     <div className="flex items-center justify-between w-full">
                       <p>Balance</p>
-
-                      <p className="text-gray-100 ml-2">{balance}</p>
+                      <div className="flex items-center">
+                        <p className="text-gray-100 mr-2">{balance}</p>
+                        {isOpenFetchBalance && (
+                          <p className="text-gray-300 text-xs">{cooldown}s</p>
+                        )}
+                      </div>
                     </div>
                   </button>
-                  <button
-                    className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-white hover:bg-opacity-20 hover:backdrop-blur-sm hover:text-white hover:bg-white/10"
-                    onClick={() => {
-                      /* 添加您的操作 */
-                    }}
-                  >
-                    History
-                  </button>
-                  <button
-                    className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-white hover:bg-opacity-20 hover:backdrop-blur-sm hover:text-white hover:bg-white/10"
-                    onClick={() => {}}
-                  >
-                    Ranking
-                  </button>
+                  <div className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-white hover:bg-opacity-20 hover:backdrop-blur-sm hover:text-white hover:bg-white/10">
+                    <button
+                      className="w-full h-full text-left" // Changed to text-left
+                      onClick={() => setIsOpenHistory(true)}
+                    >
+                      History
+                    </button>
+
+                    <Dialog
+                      open={isOpenHistory}
+                      onClose={() => setIsOpenHistory(false)}
+                      className="relative z-50"
+                    >
+                      {/* The backdrop, rendered as a fixed sibling to the panel container */}
+                      <div
+                        className="fixed inset-0 bg-black/30 backdrop-blur-sm"
+                        aria-hidden="true"
+                      />
+
+                      {/* Full-screen container to center the panel */}
+                      <div className="fixed inset-0 flex items-center justify-center p-4">
+                        {/* The actual dialog panel  */}
+                        <Dialog.Panel className="mx-auto max-w-sm rounded bg-white p-6">
+                          <Dialog.Title className="text-lg font-medium leading-6 text-gray-900">
+                            History
+                          </Dialog.Title>
+                          <div className="mt-2">
+                            <p className="text-sm text-gray-500">
+                              Here you can display the history information.
+                            </p>
+                          </div>
+
+                          <button
+                            className="mt-4 inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                            onClick={() => setIsOpenHistory(false)}
+                          >
+                            Close
+                          </button>
+                        </Dialog.Panel>
+                      </div>
+                    </Dialog>
+                  </div>
+                  <div className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-white hover:bg-opacity-20 hover:backdrop-blur-sm hover:text-white hover:bg-white/10">
+                    <button
+                      className="w-full h-full text-left" // Changed to text-left
+                      onClick={() => setIsOpenRanking(true)}
+                    >
+                      Ranking
+                    </button>
+
+                    <Dialog
+                      open={isOpenRanking}
+                      onClose={() => setIsOpenRanking(false)}
+                      className="relative z-50"
+                    >
+                      {/* The backdrop, rendered as a fixed sibling to the panel container */}
+                      <div
+                        className="fixed inset-0 bg-black/30 backdrop-blur-sm"
+                        aria-hidden="true"
+                      />
+
+                      {/* Full-screen container to center the panel */}
+                      <div className="fixed inset-0 flex items-center justify-center p-4">
+                        {/* The actual dialog panel  */}
+                        <Dialog.Panel className="mx-auto max-w-sm rounded bg-white p-6">
+                          <Dialog.Title className="text-lg font-medium leading-6 text-gray-900">
+                            Ranking
+                          </Dialog.Title>
+                          <div className="mt-2">
+                            <p className="text-sm text-gray-500">
+                              Here you can display the ranking information.
+                            </p>
+                          </div>
+
+                          <button
+                            className="mt-4 inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                            onClick={() => setIsOpenRanking(false)}
+                          >
+                            Close
+                          </button>
+                        </Dialog.Panel>
+                      </div>
+                    </Dialog>
+                  </div>
                 </div>
                 <div className="px-1 py-1">
                   <button

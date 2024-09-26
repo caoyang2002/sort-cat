@@ -34,7 +34,9 @@ const DynamicScrollingImage: React.FC<DynamicScrollingImageProps> = ({
   }, [images, initialImages])
 
   if (images.length === 0) {
-    return <div>Loading...</div>
+    return (
+      <div className="flex justify-center items-center h-full">Loading...</div>
+    )
   }
 
   return (

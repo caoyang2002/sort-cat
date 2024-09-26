@@ -19,7 +19,7 @@ const Footer = () => {
           href="mailto:reggiesimons2cy@gmial.com"
           className="text-gray-700 hover:text-white"
         >
-          Content
+          Contact
         </a>
       </div>
     </footer>

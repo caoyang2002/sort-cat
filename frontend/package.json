@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@aptos-labs/aptos-faucet-client": "^0.2.0",
     "@aptos-labs/ts-sdk": "^1.26.0",
     "@aptos-labs/wallet-adapter-ant-design": "^3.0.0",
     "@aptos-labs/wallet-adapter-react": "^3.7.0",
