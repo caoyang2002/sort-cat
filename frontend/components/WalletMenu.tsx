@@ -5,8 +5,13 @@ import {
   Transition,
   PopoverButton,
   PopoverPanel,
+  DialogTitle,
+  DialogPanel,
 } from '@headlessui/react'
-import { useWallet } from '@aptos-labs/wallet-adapter-react'
+import {
+  InputTransactionData,
+  useWallet,
+} from '@aptos-labs/wallet-adapter-react'
 import { Fragment } from 'react'
 // import { get } from 'http'
 import {
@@ -30,14 +35,16 @@ const WalletMenu = () => {
   const [isOpenFetchBalance, setIsOpenFetchBalance] = useState(false)
   const [isModalOpen, setModalOpen] = useState(false)
   const [balance, setBalance] = useState('0')
+  const [content, setContent] = useState('')
 
-  const { connected, disconnect, account } = useWallet()
+  const { connected, disconnect, account, signAndSubmitTransaction } =
+    useWallet()
 
   // 获取余额
   const fetchBalance = useCallback(async () => {
     const config = new AptosConfig({ network: Network.TESTNET })
     const aptos = new Aptos(config)
-    console.log('获取余额: ', account?.address)
+    // console.log('获取余额: ', account?.address)
     if (!account?.address) return
     const variablesObj = {
       address: account.address,
@@ -67,13 +74,14 @@ const WalletMenu = () => {
       const amountOriginal = (response as ResponseBalanceType)
         .current_fungible_asset_balances[0].amount
       const amount = new BigNumber(amountOriginal)
-      console.log('the response is ', amount)
+      // console.log('the response is ', amount)
       const factor = new BigNumber(10).pow(8)
       setBalance(amount.dividedBy(factor).toString())
     } catch (error) {
       console.error('fetchBalance error', error)
     }
   }, [account])
+
   // 领取 faucet
   async function callFaucet(
     amount: number,
@@ -108,7 +116,7 @@ const WalletMenu = () => {
     try {
       const result = await callFaucet(100000000, account?.address)
       fetchBalance()
-      console.log('faucet: ', result)
+      // console.log('faucet: ', result)
     } catch (error) {
       console.log('Error: ', error)
     }
@@ -136,6 +144,31 @@ const WalletMenu = () => {
   useEffect(() => {
     fetchBalance()
   }, [account, balance, fetchBalance]) // 当 account 更改时重新执行
+
+  // 获取历史记录
+  const getHistory = async () => {
+    const config = new AptosConfig({ network: Network.TESTNET })
+    const aptos = new Aptos(config)
+
+    if (!account) return // 如果没有账户，返回
+
+    try {
+      // 一个交易的数据信息
+      const transaction: InputTransactionData = {
+        data: {
+          function: `${process.env.NEXT_PUBLIC_NFT_MODULE_ADDESSR}::play::set_score`,
+          functionArguments: [42, [1, 2, 3]],
+        },
+      }
+
+      // 提交交易并等待交易完成
+      const response = await signAndSubmitTransaction(transaction)
+      await aptos.waitForTransaction({ transactionHash: response.hash })
+      console.log('Transaction response:', response)
+    } catch (error) {
+      console.error('Error:', error)
+    }
+  }
 
   // ui
   if (!connected) {
@@ -216,7 +249,10 @@ const WalletMenu = () => {
                   <div className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-white hover:bg-opacity-20 hover:backdrop-blur-sm hover:text-white hover:bg-white/10">
                     <button
                       className="w-full h-full text-left" // Changed to text-left
-                      onClick={() => setIsOpenHistory(true)}
+                      onClick={() => {
+                        setIsOpenHistory(true)
+                        getHistory()
+                      }}
                     >
                       History
                     </button>
@@ -235,13 +271,13 @@ const WalletMenu = () => {
                       {/* Full-screen container to center the panel */}
                       <div className="fixed inset-0 flex items-center justify-center p-4">
                         {/* The actual dialog panel  */}
-                        <Dialog.Panel className="mx-auto max-w-sm rounded bg-white p-6">
-                          <Dialog.Title className="text-lg font-medium leading-6 text-gray-900">
+                        <DialogPanel className="mx-auto max-w-sm rounded bg-white p-6">
+                          <DialogTitle className="text-lg font-medium leading-6 text-gray-900">
                             History
-                          </Dialog.Title>
+                          </DialogTitle>
                           <div className="mt-2">
                             <p className="text-sm text-gray-500">
-                              Here you can display the history information.
+                              well be adding this soon.
                             </p>
                           </div>
 
@@ -251,7 +287,7 @@ const WalletMenu = () => {
                           >
                             Close
                           </button>
-                        </Dialog.Panel>
+                        </DialogPanel>
                       </div>
                     </Dialog>
                   </div>
@@ -277,13 +313,13 @@ const WalletMenu = () => {
                       {/* Full-screen container to center the panel */}
                       <div className="fixed inset-0 flex items-center justify-center p-4">
                         {/* The actual dialog panel  */}
-                        <Dialog.Panel className="mx-auto max-w-sm rounded bg-white p-6">
-                          <Dialog.Title className="text-lg font-medium leading-6 text-gray-900">
+                        <DialogPanel className="mx-auto max-w-sm rounded bg-white p-6">
+                          <DialogTitle className="text-lg font-medium leading-6 text-gray-900">
                             Ranking
-                          </Dialog.Title>
+                          </DialogTitle>
                           <div className="mt-2">
                             <p className="text-sm text-gray-500">
-                              Here you can display the ranking information.
+                              will be added soon
                             </p>
                           </div>
 
@@ -293,7 +329,7 @@ const WalletMenu = () => {
                           >
                             Close
                           </button>
-                        </Dialog.Panel>
+                        </DialogPanel>
                       </div>
                     </Dialog>
                   </div>
