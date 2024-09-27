@@ -35,7 +35,7 @@ const WalletMenu = () => {
   const [isOpenFetchBalance, setIsOpenFetchBalance] = useState(false)
   const [isModalOpen, setModalOpen] = useState(false)
   const [balance, setBalance] = useState('0')
-  const [content, setContent] = useState('')
+  // const [content, setContent] = useState('')
 
   const { connected, disconnect, account, signAndSubmitTransaction } =
     useWallet()
@@ -114,7 +114,8 @@ const WalletMenu = () => {
   async function fetchFaucentBalance() {
     if (!account?.address) return
     try {
-      const result = await callFaucet(100000000, account?.address)
+      // const result =
+      await callFaucet(100000000, account?.address)
       fetchBalance()
       // console.log('faucet: ', result)
     } catch (error) {

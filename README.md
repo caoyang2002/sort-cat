@@ -1,3 +1,9 @@
+# Preface
+
+![image](./doc/image.png)
+
+- cat:
+
 # Start
 
 ```bash
@@ -8,8 +14,6 @@ yarn dev
 # Overview
 
 [Website](https://sortdna.vercel.app/)
-
-![ui](doc/ui.jpg)
 
 # bug
 
