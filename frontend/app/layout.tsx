@@ -29,7 +29,7 @@ export default function RootLayout({
     <>
       <html lang="en">
         <head>
-          <meta name="DNA" content="ao" />
+          <meta name="sort-cat" content="cat" />
         </head>
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
